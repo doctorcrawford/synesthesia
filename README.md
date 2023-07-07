@@ -18,3 +18,4 @@ A music visualizer that has digital artwork that is interactive with the music y
 
 #### Friday, 7/7
 * 9:30: add capstone proposal
+* 9:45: [three.js research](https://discoverthreejs.com/book/first-steps/)
