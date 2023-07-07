@@ -15,3 +15,6 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 3:40: [researching react three fiber](https://docs.pmnd.rs/react-three-fiber/tutorials/typescript)
 * 4:15: [CRA is dead](https://medium.com/@dawid.niegrebecki/create-react-app-is-dead-what-to-use-instead-fcdd46b70295)
 * 4:50: migrate to vite
+
+#### Friday, 7/7
+* 9:30: add capstone proposal
