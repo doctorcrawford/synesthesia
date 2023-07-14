@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react'
+import { render } from 'react-dom';
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
 type Shape = THREE.Mesh<THREE.BoxGeometry | THREE.SphereGeometry, THREE.MeshNormalMaterial | THREE.MeshStandardMaterial>
@@ -21,15 +23,43 @@ function cube(): Shape {
 
 const initThreeJsScene = (mesh: Shape, node: HTMLDivElement) => {
   const scene = new THREE.Scene()
-  const camera = new THREE.PerspectiveCamera(75, 500 / 500,
-    0.1, 1000)
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }
+  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,
+    0.1, 100)
+
   const renderer = new THREE.WebGLRenderer()
   renderer.setClearColor(0xffffff)
-  renderer.setSize(500, 500)
+  renderer.setSize(sizes.width, sizes.height)
   node.appendChild(renderer.domElement)
-  camera.position.z = 5
+
+  camera.position.z = 10
 
   scene.add(mesh)
+
+  const light = new THREE.PointLight(0xffffff, 1, 100)
+  light.position.set(0, 10, 10)
+  scene.add(light);
+
+  //Controls
+  const controls = new OrbitControls(camera, node);
+
+  //Resize
+  window.addEventListener('resize', () => {
+    //Update Sizes
+    console.log(window.innerWidth);
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    //Update Camera
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+  })
+  
   const animate = () => {
     requestAnimationFrame(animate)
     mesh.rotation.x += 0.01
