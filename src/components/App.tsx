@@ -1,11 +1,10 @@
-
-// const ref = useRef<HTMLInputElement>(null)
-
+import { ThreeCanvas } from './ThreeCanvas'
 
 
 function App() {
   return (
     <>
+      <ThreeCanvas />
     </>
   )
 }
