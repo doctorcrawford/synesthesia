@@ -22,30 +22,37 @@ function cube(): Shape {
 }
 
 const initThreeJsScene = (mesh: Shape, node: HTMLDivElement) => {
-  const scene = new THREE.Scene()
+  const scene = new THREE.Scene();
 
   const sizes = {
     width: window.innerWidth,
     height: window.innerHeight,
   }
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,
-    0.1, 100)
+    0.1, 100);
 
-  const renderer = new THREE.WebGLRenderer()
-  renderer.setClearColor(0xffffff)
-  renderer.setSize(sizes.width, sizes.height)
-  node.appendChild(renderer.domElement)
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setClearColor(0xffffff);
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(2);
 
-  camera.position.z = 10
+  node.appendChild(renderer.domElement);
 
-  scene.add(mesh)
+  camera.position.z = 10;
 
-  const light = new THREE.PointLight(0xffffff, 1, 100)
-  light.position.set(0, 10, 10)
+  scene.add(mesh);
+
+  const light = new THREE.PointLight(0xffffff, 1, 100);
+  light.position.set(0, 10, 10);
   scene.add(light);
 
   //Controls
   const controls = new OrbitControls(camera, node);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 3;
 
   //Resize
   window.addEventListener('resize', () => {
@@ -61,10 +68,9 @@ const initThreeJsScene = (mesh: Shape, node: HTMLDivElement) => {
   })
   
   const animate = () => {
-    requestAnimationFrame(animate)
-    mesh.rotation.x += 0.01
-    mesh.rotation.y += 0.01
-    renderer.render(scene, camera)
+    controls.update();
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
   }
   animate()
 }
