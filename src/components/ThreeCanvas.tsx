@@ -32,7 +32,7 @@ const initThreeJsScene = (mesh: Shape, node: HTMLDivElement) => {
     0.1, 100);
 
   const renderer = new THREE.WebGLRenderer();
-  renderer.setClearColor(0xffffff);
+  // renderer.setClearColor(0xffffff);
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(2);
 
