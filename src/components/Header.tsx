@@ -1,7 +1,7 @@
 function Header() {
   return (
     <>
-      <h1>Synesthesia</h1>
+      <h1 className='title'>Give It a Spin</h1>
     </>
   )
 }

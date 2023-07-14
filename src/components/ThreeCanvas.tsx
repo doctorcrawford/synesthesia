@@ -66,7 +66,7 @@ const initThreeJsScene = (mesh: Shape, node: HTMLDivElement) => {
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width, sizes.height);
   })
-  
+
   const animate = () => {
     controls.update();
     requestAnimationFrame(animate);
@@ -88,6 +88,7 @@ export const ThreeCanvas = () => {
   )
   return (
     <div
+      className='webgL'
       style={{
         display: 'flex',
         alignItems: 'center',
