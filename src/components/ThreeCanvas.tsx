@@ -64,7 +64,6 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   //Resize
   window.addEventListener('resize', () => {
     //Update Sizes
-    console.log(window.innerWidth);
     sizes.width = window.innerWidth;
     sizes.height = window.innerHeight;
 

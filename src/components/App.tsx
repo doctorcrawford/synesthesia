@@ -1,6 +1,7 @@
 import { ThreeCanvas } from './ThreeCanvas'
 import Header from './Header';
 import Navbar from './Navbar';
+import SpotifySDK from './SpotifySDK';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Navbar />
       <Header />
       <ThreeCanvas />
+      <SpotifySDK  />
     </>
   )
 }

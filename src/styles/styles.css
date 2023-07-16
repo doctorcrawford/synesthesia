@@ -41,3 +41,7 @@ nav ul {
   top: 75%;
   transform: translate(-50%, -75%);
 }
+
+.spotify {
+  color: white;
+}
