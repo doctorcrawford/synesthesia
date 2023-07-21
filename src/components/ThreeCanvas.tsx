@@ -12,8 +12,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     width: window.innerWidth,
     height: window.innerHeight,
   }
-  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,
-    0.1, 100);
+  const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height,
+    0.1, 1000);
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(0x000000);
@@ -22,12 +22,14 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   node.appendChild(renderer.domElement);
 
-  camera.position.z = 10;
+  // camera.position.z = 10;
+  camera.position.set(0,0,100);
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(3, 64, 64);
-  const sphereMaterial = new THREE.MeshStandardMaterial({
-    color: "#00ff83"
+  const sphereGeometry = new THREE.SphereGeometry(20, 30, 30);
+  const sphereMaterial = new THREE.MeshLambertMaterial({
+    color: "#00ff83",
+    wireframe: true,
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   group.add(sphere);
@@ -203,6 +205,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
       })
     }
   })
+
+  // const lowerHalf
 }
 
 export const ThreeCanvas = () => {
