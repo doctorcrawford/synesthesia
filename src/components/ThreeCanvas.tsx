@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
-
+import Track from './../resources/radio-man.mp3';
 
 type Shape = THREE.Mesh<THREE.BoxGeometry | THREE.SphereGeometry, THREE.MeshNormalMaterial | THREE.MeshStandardMaterial>
 
@@ -72,50 +72,6 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     camera.aspect = sizes.width / sizes.height;
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width, sizes.height);
-
-    // Audio
-    const initializeAudio = () => {
-
-      const audioContext = new AudioContext();
-      const audioElement = document.querySelector('audio') as HTMLMediaElement;
-      const track = audioContext.createMediaElementSource(audioElement);
-      track.connect(audioContext.destination);
-
-      const playButton = document.getElementById('play-button');
-
-      if (playButton) {
-
-        playButton?.addEventListener(
-          "click",
-          () => {
-            // Check if context is in suspended state (autoplay policy)
-            if (audioContext.state === "suspended") {
-              audioContext.resume();
-            }
-
-            // Play or pause track depending on state
-            if (playButton.dataset.playing === "false") {
-              audioElement.play();
-              playButton.dataset.playing = "true";
-            } else if (playButton.dataset.playing === "true") {
-              audioElement.pause();
-              playButton.dataset.playing = "false";
-            }
-          },
-          false,
-        );
-
-        audioElement.addEventListener(
-          'ended',
-          () => {
-            playButton.dataset.playing = 'false';
-          },
-          false,
-        );
-      } else {
-        throw new Error('no audio element');
-      }
-    }
   })
 
   const animate = () => {
@@ -123,7 +79,57 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
   }
-  animate()
+  animate();
+
+  // Audio
+  
+  const initializeAudio = () => {
+    const listener = new THREE.AudioListener();
+    camera.add(listener);
+    const sound = new THREE.Audio(listener);
+    sound.autoplay = true;
+
+    const audioContext = new AudioContext();
+    const audioElement = document.querySelector('audio') as HTMLMediaElement;
+    const track = audioContext.createMediaElementSource(audioElement);
+    track.connect(audioContext.destination);
+
+    const playButton = document.getElementById('play-button');
+
+    if (playButton) {
+
+      playButton?.addEventListener(
+        "click",
+        () => {
+          // Check if context is in suspended state (autoplay policy)
+          if (audioContext.state === "suspended") {
+            audioContext.resume();
+          }
+
+          // Play or pause track depending on state
+          if (playButton.dataset.playing === "false") {
+            audioElement.play();
+            playButton.dataset.playing = "true";
+          } else if (playButton.dataset.playing === "true") {
+            audioElement.pause();
+            playButton.dataset.playing = "false";
+          }
+        },
+        false,
+      );
+
+      audioElement.addEventListener(
+        'ended',
+        () => {
+          playButton.dataset.playing = 'false';
+        },
+        false,
+      );
+    } else {
+      throw new Error('no audio element');
+    }
+  }
+  initializeAudio();
 
   //Timeline
   const tl = gsap.timeline({ defaults: { duration: 1 } })
@@ -160,16 +166,17 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 }
 
 export const ThreeCanvas = () => {
-  const [initialized, setInitialized] = useState(false)
+  const [initialized, setInitialized] = useState(false);
   const threeDivRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (node !== null && !initialized) {
-        initThreeJsScene(node)
-        setInitialized(true)
+        initThreeJsScene(node);
+        setInitialized(true);
       }
     },
     [initialized]
-  )
+  );
+
   return (
     <div
       className='webgL'
@@ -181,5 +188,5 @@ export const ThreeCanvas = () => {
       }}
       ref={threeDivRef}
     ></div>
-  )
+  );
 }
