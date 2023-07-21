@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
-import Track from './../resources/radio-man.mp3';
 
 type Shape = THREE.Mesh<THREE.BoxGeometry | THREE.SphereGeometry, THREE.MeshNormalMaterial | THREE.MeshStandardMaterial>
 
@@ -82,7 +81,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   animate();
 
   // Audio
-  
+
   const initializeAudio = () => {
     const listener = new THREE.AudioListener();
     camera.add(listener);
@@ -91,13 +90,12 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
     const audioContext = new AudioContext();
     const audioElement = document.querySelector('audio') as HTMLMediaElement;
+    const gainNode = audioContext.createGain();
     const track = audioContext.createMediaElementSource(audioElement);
-    track.connect(audioContext.destination);
+    track.connect(gainNode).connect(audioContext.destination);
 
     const playButton = document.getElementById('play-button');
-
     if (playButton) {
-
       playButton?.addEventListener(
         "click",
         () => {
@@ -128,6 +126,20 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     } else {
       throw new Error('no audio element');
     }
+
+    const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
+    if (volumeControl) {
+      volumeControl.addEventListener(
+        'input',
+        () => {
+          gainNode.gain.value = parseFloat(volumeControl.value);
+        },
+        false,
+      );
+    } else {
+      throw new Error('no volume control');
+    }
+
   }
   initializeAudio();
 
