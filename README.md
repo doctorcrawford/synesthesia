@@ -22,4 +22,5 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 10:10: [typescript with react](https://www.freecodecamp.org/news/using-typescript-in-react-apps/)
 
 #### Friday, 7/21
-* 9:35: [three.js audo analyzer](https://threejs.org/docs/#api/en/audio/AudioAnalyser)
+* 9:35: [three.js audio analyzer](https://threejs.org/docs/#api/en/audio/AudioAnalyser)
+* 1:40 [three.js analyser node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode)
