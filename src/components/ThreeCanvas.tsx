@@ -26,7 +26,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   camera.position.set(0,0,100);
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(20, 30, 30);
+  const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
   const sphereMaterial = new THREE.MeshLambertMaterial({
     color: "#00ff83",
     wireframe: true,
@@ -52,9 +52,12 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   group.add(plane2);
 
   //Light
-  const light = new THREE.PointLight(0xffffff, 1, 100);
-  light.position.set(0, 10, 10);
-  scene.add(light);
+  const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
+  spotlight.intensity = 5.9;
+  spotlight.position.set(-30, 40, 20);
+  spotlight.lookAt(sphere.position);
+  spotlight.castShadow = true;
+  scene.add(spotlight);
 
   const ambientLight = new THREE.AmbientLight(0xaaaaaa);
   scene.add(ambientLight);
