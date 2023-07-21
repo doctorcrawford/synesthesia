@@ -2,7 +2,6 @@ body,
 html {
   overflow-x: hidden;
   font-family: 'Victor Mono', monospace;
-  background-color: black;
   color: white;
 }
 
@@ -61,6 +60,7 @@ button:hover {
   padding: 1em;
   border: 1px solid white;
   border-radius: 1em;
+  z-index: 2;
 }
 
 /* 
