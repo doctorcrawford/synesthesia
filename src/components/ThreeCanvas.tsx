@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 
+
 type Shape = THREE.Mesh<THREE.BoxGeometry | THREE.SphereGeometry, THREE.MeshNormalMaterial | THREE.MeshStandardMaterial>
 
 function sphere(): Shape {
@@ -71,6 +72,50 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     camera.aspect = sizes.width / sizes.height;
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width, sizes.height);
+
+    // Audio
+    const initializeAudio = () => {
+
+      const audioContext = new AudioContext();
+      const audioElement = document.querySelector('audio') as HTMLMediaElement;
+      const track = audioContext.createMediaElementSource(audioElement);
+      track.connect(audioContext.destination);
+
+      const playButton = document.getElementById('play-button');
+
+      if (playButton) {
+
+        playButton?.addEventListener(
+          "click",
+          () => {
+            // Check if context is in suspended state (autoplay policy)
+            if (audioContext.state === "suspended") {
+              audioContext.resume();
+            }
+
+            // Play or pause track depending on state
+            if (playButton.dataset.playing === "false") {
+              audioElement.play();
+              playButton.dataset.playing = "true";
+            } else if (playButton.dataset.playing === "true") {
+              audioElement.pause();
+              playButton.dataset.playing = "false";
+            }
+          },
+          false,
+        );
+
+        audioElement.addEventListener(
+          'ended',
+          () => {
+            playButton.dataset.playing = 'false';
+          },
+          false,
+        );
+      } else {
+        throw new Error('no audio element');
+      }
+    }
   })
 
   const animate = () => {
@@ -94,7 +139,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   window.addEventListener('mouseup', () => (mouseDown = false))
 
   const rgbToHex = (r: number, g: number, b: number) => '#' + [r, g, b]
-  .map(x => x.toString(16).padStart(2, '0')).join('')
+    .map(x => x.toString(16).padStart(2, '0')).join('')
 
   window.addEventListener('mousemove', (e) => {
     if (mouseDown) {

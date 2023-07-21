@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import SpotifySDK from './SpotifySDK';
 // import WebPlayback from './WebPlayback';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Audio from './Audio';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Router>
         <Navbar />
         <Header />
+        <Audio />
         <Routes>
           <Route path='/' element={<ThreeCanvas />} />
           {/* <Route path='/spotify' element={<SpotifySDK />} /> */}
