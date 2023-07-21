@@ -3,7 +3,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 
-
 const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
   const group = new THREE.Group();
@@ -23,7 +22,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   node.appendChild(renderer.domElement);
 
   // camera.position.z = 10;
-  camera.position.set(0,0,100);
+  camera.position.set(0, 0, 100);
 
   //The Shapes
   const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
@@ -43,12 +42,13 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = 0.5 * Math.PI;
+  // plane.rotation.y = 0.5 * Math.PI;
   plane.position.set(0, 30, 0);
   group.add(plane);
 
   const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = 0.5 * Math.PI;
-  plane.position.set(0, -30, 0);
+  plane2.rotation.x = 0.5 * Math.PI;
+  plane2.position.set(0, -30, 0);
   group.add(plane2);
 
   //Light
@@ -61,7 +61,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const ambientLight = new THREE.AmbientLight(0xaaaaaa);
   scene.add(ambientLight);
-  
+
   scene.add(group);
 
   //Controls
@@ -209,7 +209,24 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     }
   })
 
-  // const lowerHalf
+  // //Analyser
+  // analyser.getByteFrequencyData(dataArray);
+
+  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
+
+  // const overallAvg = avg(dataArray);
+  // const lowerMax = max(lowerHalfArray);
+  // const lowerAvg = avg(lowerHalfArray);
+  // const upperMax = max(upperHalfArray);
+  // const upperAvg = avg(upperHalfArray);
+
+  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
+  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+  // const upperMaxFr = upperMax / upperHalfArray.length;
+  // const upperAvgFr = upperAvg / upperHalfArray.length;
+
+  
 }
 
 export const ThreeCanvas = () => {
@@ -237,3 +254,17 @@ export const ThreeCanvas = () => {
     ></div>
   );
 }
+
+
+
+
+
+
+// function avg(arr: Uint8Array){
+//   const total = arr.reduce(function(sum, b) { return sum + b; });
+//   return (total / arr.length);
+// }
+
+// function max(arr: Uint8Array){
+//   return arr.reduce(function(a, b){ return Math.max(a, b); })
+// }
