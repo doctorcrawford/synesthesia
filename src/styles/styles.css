@@ -43,6 +43,26 @@ nav ul {
   top: 75%;
   transform: translate(-50%, -75%);
 }
+
+button {
+  font-family: 'Victor Mono', monospace;
+  background-color: transparent;
+  color: white;
+  border-radius: 1em;
+  border: 1px solid white;
+}
+
+button:hover {
+  box-shadow: 4px 4px 4px .5px rgb(81, 81, 234);
+}
+
+#audio {
+  width: fit-content;
+  padding: 1em;
+  border: 1px solid white;
+  border-radius: 1em;
+}
+
 /* 
 .spotify {
   color: white;

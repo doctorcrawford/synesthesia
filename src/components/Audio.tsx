@@ -2,7 +2,7 @@ import Track from './../resources/radio-man.mp3';
 
 export default function Audio() {
   return (
-    <>
+    <div id='audio'>
       <audio src={Track}></audio>
       <label>Volume</label>
       <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
@@ -11,6 +11,6 @@ export default function Audio() {
       <button id='play-button' data-playing='false' role='switch' aria-checked='false'>
         Play/Pause
       </button>
-    </>
+    </div>
   )
 }
