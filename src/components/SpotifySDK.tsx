@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { SpotifyApi, Scopes, SearchResults } from '@spotify/web-api-ts-sdk';
 
+
 const sdk = SpotifyApi.withUserAuthorization(
   import.meta.env.VITE_SPOTIFY_CLIENT_ID,
   import.meta.env.VITE_REDIRECT_TARGET,
