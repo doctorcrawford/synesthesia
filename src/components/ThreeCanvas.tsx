@@ -91,8 +91,10 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     const audioContext = new AudioContext();
     const audioElement = document.querySelector('audio') as HTMLMediaElement;
     const gainNode = audioContext.createGain();
+    const pannerOptions = { pan: 0 };
+    const panner = new StereoPannerNode(audioContext, pannerOptions);
     const track = audioContext.createMediaElementSource(audioElement);
-    track.connect(gainNode).connect(audioContext.destination);
+    track.connect(gainNode).connect(panner).connect(audioContext.destination);
 
     const playButton = document.getElementById('play-button');
     if (playButton) {
@@ -138,6 +140,20 @@ const initThreeJsScene = (node: HTMLDivElement) => {
       );
     } else {
       throw new Error('no volume control');
+    }
+
+    const pannerControl: HTMLInputElement | null = document.querySelector('#panner');
+
+    if (pannerControl) {
+      pannerControl.addEventListener(
+        'input',
+        () => {
+          panner.pan.value = parseFloat(pannerControl.value);
+        },
+        false,
+      );
+    } else {
+      throw new Error('no panner control');
     }
 
   }
