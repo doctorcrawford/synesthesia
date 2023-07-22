@@ -1,7 +1,7 @@
 import { ThreeCanvas } from './ThreeCanvas'
 import Header from './Header';
 import Navbar from './Navbar';
-import SpotifySDK from './SpotifySDK';
+// import SpotifySDK from './SpotifySDK';
 // import WebPlayback from './WebPlayback';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Audio from './Audio';
