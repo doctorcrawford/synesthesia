@@ -28,3 +28,4 @@ A music visualizer that has digital artwork that is interactive with the music y
 
 #### Saturday, 7/22
 * 10:25: [three.js tutorial](https://www.youtube.com/watch?v=xJAfLdUgdc4&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho)
+* 11:00: [more three.js](https://www.youtube.com/watch?v=XXzqSAt3UIw&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho&index=2)
