@@ -25,3 +25,6 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 9:35: [three.js audio analyzer](https://threejs.org/docs/#api/en/audio/AudioAnalyser)
 * 1:40 [three.js analyser node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode)
 * 2:45 [visualizer research](https://medium.com/@mag_ops/music-visualiser-with-three-js-web-audio-api-b30175e7b5ba)
+
+#### Saturday, 7/22
+* 10:25: [three.js tutorial](https://www.youtube.com/watch?v=xJAfLdUgdc4&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho)
