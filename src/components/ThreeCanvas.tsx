@@ -2,6 +2,10 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
+import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
+
+const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
@@ -209,24 +213,29 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     }
   })
 
-  // //Analyser
-  // analyser.getByteFrequencyData(dataArray);
+  //Analyser
+  analyser.getByteFrequencyData(dataArray);
 
-  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
+  const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+  const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-  // const overallAvg = avg(dataArray);
-  // const lowerMax = max(lowerHalfArray);
-  // const lowerAvg = avg(lowerHalfArray);
-  // const upperMax = max(upperHalfArray);
-  // const upperAvg = avg(upperHalfArray);
+  const overallAvg = avg(dataArray);
+  const lowerMax = max(lowerHalfArray);
+  const lowerAvg = avg(lowerHalfArray);
+  const upperMax = max(upperHalfArray);
+  const upperAvg = avg(upperHalfArray);
 
-  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
-  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-  // const upperMaxFr = upperMax / upperHalfArray.length;
-  // const upperAvgFr = upperAvg / upperHalfArray.length;
+  const lowerMaxFr = lowerMax / lowerHalfArray.length;
+  const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+  const upperMaxFr = upperMax / upperHalfArray.length;
+  const upperAvgFr = upperAvg / upperHalfArray.length;
 
-  
+  makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
+  makeRoughGround(plane2, modulate(lowerAvgFr, 0, 1, 0.5, 4));
+
+  makeRoughSphere(sphere, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
+
+  group.rotation.y += 0.005;
 }
 
 export const ThreeCanvas = () => {
@@ -257,14 +266,54 @@ export const ThreeCanvas = () => {
 
 
 
+function makeRoughSphere(mesh, bassFr, treFr) {
+  mesh.geometry.vertices.forEach(function (vertex, i) {
+    const offset = mesh.geometry.parameters.radius;
+    const amp = 7;
+    const time = window.performance.now();
+    vertex.normalize();
+    const rf = 0.00001;
+    const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
+    vertex.multiplyScalar(distance);
+  });
+  mesh.geometry.verticesNeedUpdate = true;
+  mesh.geometry.normalsNeedUpdate = true;
+  mesh.geometry.computeVertexNormals();
+  mesh.geometry.computeFaceNormals();
+}
+
+function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>, distortionFr: number) {
+  const positionAtrribute = mesh.geometry.getAttribute('position');
+  for (let i 0 )
+  
+  mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
+    const amp = 2;
+    const time = Date.now();
+    const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
+    vertex.z = distance;
+  });
+  mesh.geometry.verticesNeedUpdate = true;
+  mesh.geometry.normalsNeedUpdate = true;
+  mesh.geometry.computeVertexNormals();
+  mesh.geometry.computeFaceNormals();
+}
 
 
+function fractionate(val: number, minVal: number, maxVal: number) {
+  return (val - minVal) / (maxVal - minVal);
+}
 
-// function avg(arr: Uint8Array){
-//   const total = arr.reduce(function(sum, b) { return sum + b; });
-//   return (total / arr.length);
-// }
+function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+  const fr = fractionate(val, minVal, maxVal);
+  const delta = outMax - outMin;
+  return outMin + (fr * delta);
+}
 
-// function max(arr: Uint8Array){
-//   return arr.reduce(function(a, b){ return Math.max(a, b); })
-// }
+function avg(arr: Uint8Array) {
+  const total = arr.reduce(function (sum, b) { return sum + b; });
+  return (total / arr.length);
+}
+
+function max(arr: Uint8Array) {
+  return arr.reduce(function (a, b) { return Math.max(a, b); })
+}
