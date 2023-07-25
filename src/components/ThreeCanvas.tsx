@@ -233,20 +233,19 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   // makeRoughSphere(sphere, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
 
   // group.rotation.y += 0.005;
-  
+
 
 
   //plane movement
   const nPosPlane = [];
-  const v3Plane = new THREE.Vector3();
-  const posPlane = planeGeometry.attributes.position;
-  for (let j = 0; j < posPlane.count; j ++) {
-    v3Plane.fromBufferAttribute(posPlane, j).normalize();
-    nPosPlane.push(v3Plane.clone());
+  const v2Plane = new THREE.Vector2();
+  const posPlane = planeGeometry.attributes.position as THREE.BufferAttribute;
+  for (let j = 0; j < posPlane.count; j++) {
+    v2Plane.fromBufferAttribute(posPlane, j).normalize();
+    nPosPlane.push(v2Plane.clone());
   }
   planeGeometry.userData.nPosPlane = nPosPlane;
   const amp = 200;
-
 
 
   // sphere movement
@@ -259,15 +258,17 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   }
   sphereGeometry.userData.nPosSphere = nPosSphere;
   const noise = new SimplexNoise();
-  
+
   const clock = new THREE.Clock();
   const radius = 10;
   console.log(v3Sphere);
-  console.log(v3Plane);
+  console.log(v2Plane);
 
-  
+  const planeCount = planeGeometry.attributes.position.count;
+
+
   const animate = () => {
-
+    // Update sphere vertices
     const t = clock.getElapsedTime();
     sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
       const ns = noise.noise4d(p.x, p.y, p.z, t);
@@ -277,25 +278,30 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     sphereGeometry.computeVertexNormals();
     posSphere.needsUpdate = true;
 
-    planeGeometry.userData.nPosPlane.forEach((p: THREE.Vector3, j: number) => {
-      const ns = noise.noise4d(p.x, p.y, p.z, t);
-      v3Plane.copy(p).multiplyScalar(amp).addScaledVector(p, ns);
-      posPlane.setXYZ(j, v3Plane.x, v3Plane.y, v3Plane.z);
-    });
-    planeGeometry.computeVertexNormals();
-    posPlane.needsUpdate = true;
-
-    // // Update plane vertices
-    // const now = Date.now() / 300;
-    // for (let i = 0; i < planeCount; i++) {
-    //   const x = planeGeometry.attributes.position.getX(i);
-    //   const y = planeGeometry.attributes.position.getY(i);
-    //   const xsin = Math.sin(x + now);
-    //   const ycos = Math.cos(y + now);
-    //   planeGeometry.attributes.position.setZ(i, xsin + ycos);
-    // }
+    // NOT QUITE WORKING: ANOTHER WAY TO UPDATE PLANE VERTICES
+    // planeGeometry.userData.nPosPlane.forEach((p: THREE.Vector2, j: number) => {
+    //   const ns = noise.noise(p.x, p.y);
+    //   v2Plane.copy(p).multiplyScalar(amp).addScaledVector(p, ns);
+    //   posPlane.setXY(j, v2Plane.x, v2Plane.y);
+    // });
     // planeGeometry.computeVertexNormals();
-    // planeGeometry.attributes.position.needsUpdate = true;
+    // posPlane.needsUpdate = true;
+
+
+    // Update plane vertices
+    const now = Date.now() / 300;
+    for (let i = 0; i < planeCount; i++) {
+      const x = planeGeometry.attributes.position.getX(i);
+      const y = planeGeometry.attributes.position.getY(i);
+      const xsin = Math.sin(x + now);
+      const ycos = Math.cos(y + now);
+      planeGeometry.attributes.position.setZ(i, xsin + ycos);
+    }
+    planeGeometry.computeVertexNormals();
+    planeGeometry.attributes.position.needsUpdate = true;
+
+
+    //  ANOTHER WAY TO UPDATE SPHERE VERTICES
 
     // //Update sphere vertices
     // // iterate all vertices
