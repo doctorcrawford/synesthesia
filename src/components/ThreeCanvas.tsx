@@ -233,43 +233,57 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   // makeRoughSphere(sphere, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
 
   // group.rotation.y += 0.005;
-
-  // const planeCount: number = planeGeometry.attributes.position.count;
-
-  // const spherePosition_clone = JSON.parse(
-  //   JSON.stringify(sphereGeometry.attributes.position.array)
-  // ) as Float32Array;
-  // const sphereNormals_clone = JSON.parse(
-  //   JSON.stringify(sphereGeometry.attributes.normal.array)
-  // ) as Float32Array;
-  // const damping = 0.5;
+  
 
 
-  // const sphereCount: number = planeGeometry.attributes.position.count;
-
-  const nPos = [];
-  const v3 = new THREE.Vector3();
-  const pos = sphereGeometry.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    v3.fromBufferAttribute(pos, i).normalize();
-    nPos.push(v3.clone());
+  //plane movement
+  const nPosPlane = [];
+  const v3Plane = new THREE.Vector3();
+  const posPlane = planeGeometry.attributes.position;
+  for (let j = 0; j < posPlane.count; j ++) {
+    v3Plane.fromBufferAttribute(posPlane, j).normalize();
+    nPosPlane.push(v3Plane.clone());
   }
-  sphereGeometry.userData.nPos = nPos;
+  planeGeometry.userData.nPosPlane = nPosPlane;
+  const amp = 200;
+
+
+
+  // sphere movement
+  const nPosSphere = [];
+  const v3Sphere = new THREE.Vector3();
+  const posSphere = sphereGeometry.attributes.position;
+  for (let i = 0; i < posSphere.count; i++) {
+    v3Sphere.fromBufferAttribute(posSphere, i).normalize();
+    nPosSphere.push(v3Sphere.clone());
+  }
+  sphereGeometry.userData.nPosSphere = nPosSphere;
   const noise = new SimplexNoise();
   
   const clock = new THREE.Clock();
-  const radius = 20;
+  const radius = 10;
+  console.log(v3Sphere);
+  console.log(v3Plane);
+
   
   const animate = () => {
 
     const t = clock.getElapsedTime();
-    sphereGeometry.userData.nPos.forEach((p: THREE.Vector3, i: number) => {
+    sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
       const ns = noise.noise4d(p.x, p.y, p.z, t);
-      v3.copy(p).multiplyScalar(radius).addScaledVector(p, ns);
-      pos.setXYZ(i, v3.x, v3.y, v3.z);
+      v3Sphere.copy(p).multiplyScalar(radius).addScaledVector(p, ns);
+      posSphere.setXYZ(i, v3Sphere.x, v3Sphere.y, v3Sphere.z);
     });
     sphereGeometry.computeVertexNormals();
-    pos.needsUpdate = true;
+    posSphere.needsUpdate = true;
+
+    planeGeometry.userData.nPosPlane.forEach((p: THREE.Vector3, j: number) => {
+      const ns = noise.noise4d(p.x, p.y, p.z, t);
+      v3Plane.copy(p).multiplyScalar(amp).addScaledVector(p, ns);
+      posPlane.setXYZ(j, v3Plane.x, v3Plane.y, v3Plane.z);
+    });
+    planeGeometry.computeVertexNormals();
+    posPlane.needsUpdate = true;
 
     // // Update plane vertices
     // const now = Date.now() / 300;
