@@ -38,8 +38,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   group.add(sphere);
 
-  const planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
-  const planeMaterial = new THREE.MeshLambertMaterial({
+  const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
+  const planeMaterial = new THREE.ShaderMaterial({
     color: 0xE1E100,
     side: THREE.DoubleSide,
     wireframe: true
@@ -96,20 +96,23 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   sound.autoplay = true;
   sound.setLoop(true);
 
-  const audioContext = new AudioContext();
+  const audioContext = new window.AudioContext();
   const audioElement = document.querySelector('audio') as HTMLMediaElement;
-  const track = audioContext.createMediaElementSource(audioElement);
+  const source = audioContext.createMediaElementSource(audioElement);
   const analyser = audioContext.createAnalyser();
   const gainNode = audioContext.createGain();
   const pannerOptions = { pan: 0 };
   const panner = new StereoPannerNode(audioContext, pannerOptions);
-  track.connect(gainNode)
+  source.connect(gainNode)
     .connect(panner)
-    .connect(analyser)
-    .connect(audioContext.destination);
-  analyser.fftSize = 512;
+    .connect(analyser);
+  // .connect(audioContext.destination);
+  analyser.connect(audioContext.destination);
+  analyser.fftSize = 1024;
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
+
+  console.log(listener);
 
 
   const playButton = document.getElementById('play-button');
@@ -144,6 +147,22 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   } else {
     throw new Error('no audio element');
   }
+
+  const uniforms = {
+    u_time: {
+      type: "f",
+      value: 1.0,
+    },
+    u_amplitude: {
+      type: "f",
+      value: 3.0,
+    },
+    u_data_arr: {
+      type: "float[64]",
+      value: dataArray,
+    },
+  };
+
 
   const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
   if (volumeControl) {
@@ -210,7 +229,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   //Analyser
   analyser.getByteFrequencyData(dataArray);
   console.log(analyser);
-  
+
 
 
   const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
@@ -267,20 +286,20 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const animate = () => {
 
-    console.log(analyser);
+    console.log(listener);
 
     // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
-//   for (const vertex in mesh.position) {
-//     const offset = mesh.geometry.boundingSphere?.radius;
-//     const amp = 7;
-//     const time = window.performance.now();
-//     // vertex.normalize();
-//     const rf = 0.00001;
-//     if (offset !== undefined) {
-//       const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-//       vertex.multiplyScalar(distance);
-//     }
-//   });
+    //   for (const vertex in mesh.position) {
+    //     const offset = mesh.geometry.boundingSphere?.radius;
+    //     const amp = 7;
+    //     const time = window.performance.now();
+    //     // vertex.normalize();
+    //     const rf = 0.00001;
+    //     if (offset !== undefined) {
+    //       const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
+    //       vertex.multiplyScalar(distance);
+    //     }
+    //   });
 
     // Update sphere vertices
     const t = clock.getElapsedTime();
