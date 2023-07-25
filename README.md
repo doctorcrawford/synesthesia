@@ -36,3 +36,4 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 7:45: [three.js still update vertices](https://discourse.threejs.org/t/update-vertices-of-a-sphere/10863)
 * 8:00: [how to update vertices/morph 3d objects/buffergeometry](https://www.youtube.com/watch?v=ZYi0xGp882I&t=98s)
 * 9:55: [updating vertices](https://jsfiddle.net/prisoner849/wnash36c/)
+* 2:50: [audio analyser](https://www.youtube.com/watch?v=tQL1VLTJTnc)
