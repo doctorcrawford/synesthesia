@@ -30,3 +30,6 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 10:25: [three.js tutorial](https://www.youtube.com/watch?v=xJAfLdUgdc4&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho)
 * 11:00: [more three.js](https://www.youtube.com/watch?v=XXzqSAt3UIw&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho&index=2)
 * 11:20: [three.js react portfolio tutorial](https://www.youtube.com/watch?v=0fYi8SGA20k)
+
+#### Tuesday, 7/24
+* 7:15: [three.js update vertices](https://threejs.org/docs/#manual/en/introduction/How-to-update-things)
