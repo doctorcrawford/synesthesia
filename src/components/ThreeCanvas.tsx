@@ -230,6 +230,9 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const upperMaxFr = upperMax / upperHalfArray.length;
   const upperAvgFr = upperAvg / upperHalfArray.length;
 
+  console.log('mesh')
+  console.log(plane);
+
   makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
   makeRoughGround(plane2, modulate(lowerAvgFr, 0, 1, 0.5, 4));
 
@@ -264,17 +267,19 @@ export const ThreeCanvas = () => {
   );
 }
 
+type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 
-
-function makeRoughSphere(mesh, bassFr, treFr) {
-  mesh.geometry.vertices.forEach(function (vertex, i) {
-    const offset = mesh.geometry.parameters.radius;
+function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
+  for (const vertex in mesh.position) {
+    const offset = mesh.geometry.boundingSphere?.radius;
     const amp = 7;
     const time = window.performance.now();
-    vertex.normalize();
+    // vertex.normalize();
     const rf = 0.00001;
-    const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-    vertex.multiplyScalar(distance);
+    if (offset !== undefined) {
+      const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
+      vertex.multiplyScalar(distance);
+    }
   });
   mesh.geometry.verticesNeedUpdate = true;
   mesh.geometry.normalsNeedUpdate = true;
@@ -285,13 +290,13 @@ function makeRoughSphere(mesh, bassFr, treFr) {
 function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>, distortionFr: number) {
   const positionAtrribute = mesh.geometry.getAttribute('position');
   for (let i 0 )
-  
-  mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
-    const amp = 2;
-    const time = Date.now();
-    const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
-    vertex.z = distance;
-  });
+
+    mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
+      const amp = 2;
+      const time = Date.now();
+      const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
+      vertex.z = distance;
+    });
   mesh.geometry.verticesNeedUpdate = true;
   mesh.geometry.normalsNeedUpdate = true;
   mesh.geometry.computeVertexNormals();
