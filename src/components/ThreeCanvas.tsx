@@ -209,23 +209,24 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   //Analyser
   analyser.getByteFrequencyData(dataArray);
+  console.log(analyser);
+  
 
-  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-  // const overallAvg = avg(dataArray);
-  // const lowerMax = max(lowerHalfArray);
-  // const lowerAvg = avg(lowerHalfArray);
-  // const upperMax = max(upperHalfArray);
-  // const upperAvg = avg(upperHalfArray);
+  const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+  const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
-  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-  // const upperMaxFr = upperMax / upperHalfArray.length;
-  // const upperAvgFr = upperAvg / upperHalfArray.length;
+  const overallAvg = avg(dataArray);
+  const lowerMax = max(lowerHalfArray);
+  const lowerAvg = avg(lowerHalfArray);
+  const upperMax = max(upperHalfArray);
+  const upperAvg = avg(upperHalfArray);
 
-  console.log('mesh')
-  console.log(plane);
+  const lowerMaxFr = lowerMax / lowerHalfArray.length;
+  const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+  const upperMaxFr = upperMax / upperHalfArray.length;
+  const upperAvgFr = upperAvg / upperHalfArray.length;
+
 
   // makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
   // makeRoughGround(plane2, modulate(lowerAvgFr, 0, 1, 0.5, 4));
@@ -236,16 +237,15 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
 
-  //plane movement
-  const nPosPlane = [];
-  const v2Plane = new THREE.Vector2();
-  const posPlane = planeGeometry.attributes.position as THREE.BufferAttribute;
-  for (let j = 0; j < posPlane.count; j++) {
-    v2Plane.fromBufferAttribute(posPlane, j).normalize();
-    nPosPlane.push(v2Plane.clone());
-  }
-  planeGeometry.userData.nPosPlane = nPosPlane;
-  const amp = 200;
+  // plane movement
+  // const nPosPlane = [];
+  // const v2Plane = new THREE.Vector2();
+  // const posPlane = planeGeometry.attributes.position as THREE.BufferAttribute;
+  // for (let j = 0; j < posPlane.count; j++) {
+  //   v2Plane.fromBufferAttribute(posPlane, j).normalize();
+  //   nPosPlane.push(v2Plane.clone());
+  // }
+  // planeGeometry.userData.nPosPlane = nPosPlane;
 
 
   // sphere movement
@@ -261,18 +261,36 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const clock = new THREE.Clock();
   const radius = 10;
-  console.log(v3Sphere);
-  console.log(v2Plane);
 
   const planeCount = planeGeometry.attributes.position.count;
 
 
   const animate = () => {
+
+    console.log(analyser);
+
+    // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
+//   for (const vertex in mesh.position) {
+//     const offset = mesh.geometry.boundingSphere?.radius;
+//     const amp = 7;
+//     const time = window.performance.now();
+//     // vertex.normalize();
+//     const rf = 0.00001;
+//     if (offset !== undefined) {
+//       const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
+//       vertex.multiplyScalar(distance);
+//     }
+//   });
+
     // Update sphere vertices
     const t = clock.getElapsedTime();
     sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
       const ns = noise.noise4d(p.x, p.y, p.z, t);
-      v3Sphere.copy(p).multiplyScalar(radius).addScaledVector(p, ns);
+      const amp = 7;
+      const rf = 2;
+      const distance = (radius + modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8)) + noise.noise3d(p.x + t * rf * 7, p.y + t * rf * 8, p.z + t * rf * 9) * amp * modulate(upperAvgFr, 0, 1, 0, 4);
+
+      v3Sphere.copy(p).multiplyScalar(amp).addScaledVector(p, distance);
       posSphere.setXYZ(i, v3Sphere.x, v3Sphere.y, v3Sphere.z);
     });
     sphereGeometry.computeVertexNormals();
@@ -401,21 +419,21 @@ export const ThreeCanvas = () => {
 // }
 
 
-// function fractionate(val: number, minVal: number, maxVal: number) {
-//   return (val - minVal) / (maxVal - minVal);
-// }
+function fractionate(val: number, minVal: number, maxVal: number) {
+  return (val - minVal) / (maxVal - minVal);
+}
 
-// function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
-//   const fr = fractionate(val, minVal, maxVal);
-//   const delta = outMax - outMin;
-//   return outMin + (fr * delta);
-// }
+function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+  const fr = fractionate(val, minVal, maxVal);
+  const delta = outMax - outMin;
+  return outMin + (fr * delta);
+}
 
-// function avg(arr: Uint8Array) {
-//   const total = arr.reduce(function (sum, b) { return sum + b; });
-//   return (total / arr.length);
-// }
+function avg(arr: Uint8Array) {
+  const total = arr.reduce(function (sum, b) { return sum + b; });
+  return (total / arr.length);
+}
 
-// function max(arr: Uint8Array) {
-//   return arr.reduce(function (a, b) { return Math.max(a, b); })
-// }
+function max(arr: Uint8Array) {
+  return arr.reduce(function (a, b) { return Math.max(a, b); })
+}
