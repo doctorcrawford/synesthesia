@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { json } from 'react-router-dom';
 
 const noise = new SimplexNoise();
 
@@ -40,7 +39,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
   const planeMaterial = new THREE.MeshLambertMaterial({
-    color: 0x6904ce,
+    color: 0xE1E100,
     side: THREE.DoubleSide,
     wireframe: true
   });
@@ -243,10 +242,24 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     JSON.stringify(sphereGeometry.attributes.normal.array)
   ) as Float32Array;
   const damping = 0.5;
-  
+
+
   const sphereCount: number = planeGeometry.attributes.position.count;
 
+  const nPos = [];
+  const v3 = new THREE.Vector3();
+  const pos = sphereGeometry.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    v3.fromBufferAttribute(pos, i).normalize();
+    nPos.push(v3.clone());
+  }
+  sphereGeometry.userData.nPos = nPos;
+  let noise = createNoise4D(Date.now());
+  const clock = new THREE.Clock();
+  
   const animate = () => {
+
+    let t = clock.getElapsedTime
 
     // Update plane vertices
     const now = Date.now() / 300;
@@ -262,7 +275,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
     //Update sphere vertices
     // iterate all vertices
-    for (let j = 0; j < sphereCount; j ++) {
+    sphereGeometry.userData.nPos.forEach()
+    for (let j = 0; j < sphereCount; j++) {
       //use uvs to calculate wave
       const uX = sphereGeometry.attributes.uv.getX(j) * Math.PI * 16;
       const uY = sphereGeometry.attributes.uv.getY(j) * Math.PI * 16;
@@ -279,6 +293,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
       const iz = j * 3 + 2;
 
       //set new position
+      sphereGeometry
       sphereGeometry.attributes.position.setX(j, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
       sphereGeometry.attributes.position.setY(j, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
       sphereGeometry.attributes.position.setZ(j, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
