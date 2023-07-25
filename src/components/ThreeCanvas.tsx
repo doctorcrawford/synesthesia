@@ -2,10 +2,11 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
-import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
+// import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
+// import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 
-const noise = new SimplexNoise();
+// const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
@@ -209,19 +210,19 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   //Analyser
   analyser.getByteFrequencyData(dataArray);
 
-  const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-  const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
+  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-  const overallAvg = avg(dataArray);
-  const lowerMax = max(lowerHalfArray);
-  const lowerAvg = avg(lowerHalfArray);
-  const upperMax = max(upperHalfArray);
-  const upperAvg = avg(upperHalfArray);
+  // const overallAvg = avg(dataArray);
+  // const lowerMax = max(lowerHalfArray);
+  // const lowerAvg = avg(lowerHalfArray);
+  // const upperMax = max(upperHalfArray);
+  // const upperAvg = avg(upperHalfArray);
 
-  const lowerMaxFr = lowerMax / lowerHalfArray.length;
-  const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-  const upperMaxFr = upperMax / upperHalfArray.length;
-  const upperAvgFr = upperAvg / upperHalfArray.length;
+  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
+  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+  // const upperMaxFr = upperMax / upperHalfArray.length;
+  // const upperAvgFr = upperAvg / upperHalfArray.length;
 
   console.log('mesh')
   console.log(plane);
@@ -233,18 +234,18 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   // group.rotation.y += 0.005;
 
-  const planeCount: number = planeGeometry.attributes.position.count;
+  // const planeCount: number = planeGeometry.attributes.position.count;
 
-  const spherePosition_clone = JSON.parse(
-    JSON.stringify(sphereGeometry.attributes.position.array)
-  ) as Float32Array;
-  const sphereNormals_clone = JSON.parse(
-    JSON.stringify(sphereGeometry.attributes.normal.array)
-  ) as Float32Array;
-  const damping = 0.5;
+  // const spherePosition_clone = JSON.parse(
+  //   JSON.stringify(sphereGeometry.attributes.position.array)
+  // ) as Float32Array;
+  // const sphereNormals_clone = JSON.parse(
+  //   JSON.stringify(sphereGeometry.attributes.normal.array)
+  // ) as Float32Array;
+  // const damping = 0.5;
 
 
-  const sphereCount: number = planeGeometry.attributes.position.count;
+  // const sphereCount: number = planeGeometry.attributes.position.count;
 
   const nPos = [];
   const v3 = new THREE.Vector3();
@@ -254,52 +255,61 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     nPos.push(v3.clone());
   }
   sphereGeometry.userData.nPos = nPos;
-  let noise = createNoise4D(Date.now());
+  const noise = new SimplexNoise();
+  
   const clock = new THREE.Clock();
+  const radius = 20;
   
   const animate = () => {
 
-    let t = clock.getElapsedTime
-
-    // Update plane vertices
-    const now = Date.now() / 300;
-    for (let i = 0; i < planeCount; i++) {
-      const x = planeGeometry.attributes.position.getX(i);
-      const y = planeGeometry.attributes.position.getY(i);
-      const xsin = Math.sin(x + now);
-      const ycos = Math.cos(y + now);
-      planeGeometry.attributes.position.setZ(i, xsin + ycos);
-    }
-    planeGeometry.computeVertexNormals();
-    planeGeometry.attributes.position.needsUpdate = true;
-
-    //Update sphere vertices
-    // iterate all vertices
-    sphereGeometry.userData.nPos.forEach()
-    for (let j = 0; j < sphereCount; j++) {
-      //use uvs to calculate wave
-      const uX = sphereGeometry.attributes.uv.getX(j) * Math.PI * 16;
-      const uY = sphereGeometry.attributes.uv.getY(j) * Math.PI * 16;
-
-      // calculate current vertex wave height
-      const xangle = (uX + now);
-      const xsin = Math.sin(xangle) * damping;
-      const yangle = (uY + now);
-      const ycos = Math.cos(yangle) * damping;
-
-      // indices
-      const ix = j * 3;
-      const iy = j * 3 + 1;
-      const iz = j * 3 + 2;
-
-      //set new position
-      sphereGeometry
-      sphereGeometry.attributes.position.setX(j, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
-      sphereGeometry.attributes.position.setY(j, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
-      sphereGeometry.attributes.position.setZ(j, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
-    }
+    const t = clock.getElapsedTime();
+    sphereGeometry.userData.nPos.forEach((p: THREE.Vector3, i: number) => {
+      const ns = noise.noise4d(p.x, p.y, p.z, t);
+      v3.copy(p).multiplyScalar(radius).addScaledVector(p, ns);
+      pos.setXYZ(i, v3.x, v3.y, v3.z);
+    });
     sphereGeometry.computeVertexNormals();
-    sphereGeometry.attributes.position.needsUpdate = true;
+    pos.needsUpdate = true;
+
+    // // Update plane vertices
+    // const now = Date.now() / 300;
+    // for (let i = 0; i < planeCount; i++) {
+    //   const x = planeGeometry.attributes.position.getX(i);
+    //   const y = planeGeometry.attributes.position.getY(i);
+    //   const xsin = Math.sin(x + now);
+    //   const ycos = Math.cos(y + now);
+    //   planeGeometry.attributes.position.setZ(i, xsin + ycos);
+    // }
+    // planeGeometry.computeVertexNormals();
+    // planeGeometry.attributes.position.needsUpdate = true;
+
+    // //Update sphere vertices
+    // // iterate all vertices
+    // sphereGeometry.userData.nPos.forEach()
+    // for (let j = 0; j < sphereCount; j++) {
+    //   //use uvs to calculate wave
+    //   const uX = sphereGeometry.attributes.uv.getX(j) * Math.PI * 16;
+    //   const uY = sphereGeometry.attributes.uv.getY(j) * Math.PI * 16;
+
+    //   // calculate current vertex wave height
+    //   const xangle = (uX + now);
+    //   const xsin = Math.sin(xangle) * damping;
+    //   const yangle = (uY + now);
+    //   const ycos = Math.cos(yangle) * damping;
+
+    //   // indices
+    //   const ix = j * 3;
+    //   const iy = j * 3 + 1;
+    //   const iz = j * 3 + 2;
+
+    //   //set new position
+    //   sphereGeometry
+    //   sphereGeometry.attributes.position.setX(j, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
+    //   sphereGeometry.attributes.position.setY(j, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
+    //   sphereGeometry.attributes.position.setZ(j, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
+    // }
+    // sphereGeometry.computeVertexNormals();
+    // sphereGeometry.attributes.position.needsUpdate = true;
 
     controls.update();
     requestAnimationFrame(animate);
@@ -334,7 +344,7 @@ export const ThreeCanvas = () => {
   );
 }
 
-type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
+// type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 
 // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
 //   for (const vertex in mesh.position) {
@@ -371,21 +381,21 @@ type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 // }
 
 
-function fractionate(val: number, minVal: number, maxVal: number) {
-  return (val - minVal) / (maxVal - minVal);
-}
+// function fractionate(val: number, minVal: number, maxVal: number) {
+//   return (val - minVal) / (maxVal - minVal);
+// }
 
-function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
-  const fr = fractionate(val, minVal, maxVal);
-  const delta = outMax - outMin;
-  return outMin + (fr * delta);
-}
+// function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+//   const fr = fractionate(val, minVal, maxVal);
+//   const delta = outMax - outMin;
+//   return outMin + (fr * delta);
+// }
 
-function avg(arr: Uint8Array) {
-  const total = arr.reduce(function (sum, b) { return sum + b; });
-  return (total / arr.length);
-}
+// function avg(arr: Uint8Array) {
+//   const total = arr.reduce(function (sum, b) { return sum + b; });
+//   return (total / arr.length);
+// }
 
-function max(arr: Uint8Array) {
-  return arr.reduce(function (a, b) { return Math.max(a, b); })
-}
+// function max(arr: Uint8Array) {
+//   return arr.reduce(function (a, b) { return Math.max(a, b); })
+// }
