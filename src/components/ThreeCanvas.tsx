@@ -88,13 +88,6 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     renderer.setSize(sizes.width, sizes.height);
   })
 
-  const animate = () => {
-    controls.update();
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
-  animate();
-
   // Audio
   const listener = new THREE.AudioListener();
   camera.add(listener);
@@ -238,7 +231,25 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   // makeRoughSphere(sphere, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
 
-  group.rotation.y += 0.005;
+  // group.rotation.y += 0.005;
+
+  const count: number = planeGeometry.attributes.position.count;
+
+  const animate = () => {
+    
+    const now = Date.now() / 300;
+    for (let i = 0; i < count; i++) {
+      const x = planeGeometry.attributes.position.getX(i);
+      const xsin = Math.sin(x + now);
+      planeGeometry.attributes.position.setZ(i, xsin);
+    }
+    planeGeometry.attributes.position.needsUpdate = true;
+
+    controls.update();
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
 }
 
 export const ThreeCanvas = () => {
