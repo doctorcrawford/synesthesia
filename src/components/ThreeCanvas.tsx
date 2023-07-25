@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
+import { json } from 'react-router-dom';
 
 const noise = new SimplexNoise();
 
@@ -233,17 +234,57 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   // group.rotation.y += 0.005;
 
-  const count: number = planeGeometry.attributes.position.count;
+  const planeCount: number = planeGeometry.attributes.position.count;
+
+  const spherePosition_clone = JSON.parse(
+    JSON.stringify(sphereGeometry.attributes.position.array)
+  ) as Float32Array;
+  const sphereNormals_clone = JSON.parse(
+    JSON.stringify(sphereGeometry.attributes.normal.array)
+  ) as Float32Array;
+  const damping = 0.5;
+  
+  const sphereCount: number = planeGeometry.attributes.position.count;
 
   const animate = () => {
-    
+
+    // Update plane vertices
     const now = Date.now() / 300;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < planeCount; i++) {
       const x = planeGeometry.attributes.position.getX(i);
+      const y = planeGeometry.attributes.position.getY(i);
       const xsin = Math.sin(x + now);
-      planeGeometry.attributes.position.setZ(i, xsin);
+      const ycos = Math.cos(y + now);
+      planeGeometry.attributes.position.setZ(i, xsin + ycos);
     }
+    planeGeometry.computeVertexNormals();
     planeGeometry.attributes.position.needsUpdate = true;
+
+    //Update sphere vertices
+    // iterate all vertices
+    for (let j = 0; j < sphereCount; j ++) {
+      //use uvs to calculate wave
+      const uX = sphereGeometry.attributes.uv.getX(j) * Math.PI * 16;
+      const uY = sphereGeometry.attributes.uv.getY(j) * Math.PI * 16;
+
+      // calculate current vertex wave height
+      const xangle = (uX + now);
+      const xsin = Math.sin(xangle) * damping;
+      const yangle = (uY + now);
+      const ycos = Math.cos(yangle) * damping;
+
+      // indices
+      const ix = j * 3;
+      const iy = j * 3 + 1;
+      const iz = j * 3 + 2;
+
+      //set new position
+      sphereGeometry.attributes.position.setX(j, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
+      sphereGeometry.attributes.position.setY(j, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
+      sphereGeometry.attributes.position.setZ(j, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
+    }
+    sphereGeometry.computeVertexNormals();
+    sphereGeometry.attributes.position.needsUpdate = true;
 
     controls.update();
     requestAnimationFrame(animate);
