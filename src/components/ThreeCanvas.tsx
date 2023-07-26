@@ -213,7 +213,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const tl2 = gsap.timeline({ defaults: { duration: 3 } })
   tl.fromTo(sphere.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 })
   tl2.fromTo('nav', { y: '-100%' }, { y: '0%' })
-  tl2.fromTo('.title', { opacity: 0 }, { opacity: 1 })
+  tl2.fromTo('.header-title', { opacity: 0 }, { opacity: 1 })
 
   //Mouse Animation Color
   let mouseDown = false;

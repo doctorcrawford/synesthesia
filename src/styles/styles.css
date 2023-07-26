@@ -33,7 +33,7 @@ nav ul {
   gap: 3rem;
 }
 
-.title {
+.header-title {
   color: white;
   z-index: 2;
   position: absolute;
@@ -61,6 +61,14 @@ button:hover {
   border: 1px solid white;
   border-radius: 1em;
   z-index: 2;
+}
+
+.dg {
+  color: blue;
+} 
+
+.dg.ac {
+  z-index: 3;
 }
 
 /* 
