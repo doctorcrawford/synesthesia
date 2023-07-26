@@ -40,3 +40,4 @@ A music visualizer that has digital artwork that is interactive with the music y
 
 #### Wednewday, 7/26
 * 7:15: [spotify audio analysis](https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis)
+* 1:00: [web audio api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API)
