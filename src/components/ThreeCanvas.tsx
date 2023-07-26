@@ -6,6 +6,7 @@ import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 // import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 // import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 import { GUI } from 'dat.gui';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 const noise = new SimplexNoise();
 
@@ -13,6 +14,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
   const group = new THREE.Group();
   const gui = new GUI();
+  const stats = new Stats();
+  document.body.appendChild(stats.dom);
 
   const sizes = {
     width: window.innerWidth,
@@ -130,9 +133,9 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(10, 128, 64);
+  const sphereGeometry = new THREE.SphereGeometry(10, 256, 128);
   const sphereMaterial = new THREE.MeshPhongMaterial({
-    color: "#00ff83",
+    color: "#e6ffa8",
     wireframe: true,
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -155,16 +158,16 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   plane2.position.set(0, -30, 0);
   group.add(plane2);
 
-  const sphereFolder = gui.addFolder('Sphere');
+  const planeFolder = gui.addFolder('Plane');
   const materialParams = {
-    sphereMeshColor: plane.material.color.getHex(),
+    planeMeshColor: plane.material.color.getHex(),
   };
-  sphereFolder.add(plane.material, 'wireframe');
-  sphereFolder
-    .addColor(materialParams, 'sphereMeshColor')
+  planeFolder.add(plane.material, 'wireframe');
+  planeFolder
+    .addColor(materialParams, 'planeMeshColor')
     .onChange((value) => plane.material.color.set(value));
-  
-  sphereFolder.open();
+
+  planeFolder.open();
   console.log(sphere);
 
   //Light
@@ -330,7 +333,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
     makeRoughSphere(sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 2, 0, 4), damping);
 
-    makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
+    makeRoughGround(plane, modulate(lowerAvgFr, 0, 1, 0.5, 4));
 
 
     // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
@@ -416,6 +419,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     controls.update();
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+    stats.update();
   }
   animate();
 }
