@@ -129,7 +129,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   //The Shapes
   const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
-  const sphereMaterial = new THREE.MeshLambertMaterial({
+  const sphereMaterial = new THREE.MeshStandardMaterial({
     color: "#00ff83",
     wireframe: true,
   });
@@ -291,7 +291,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const sphereNormals_clone = JSON.parse(
     JSON.stringify(sphereGeometry.attributes.normal.array)
   ) as Float32Array;
-  const damping = 0.5;
+  const damping = 0.2;
 
   const animate = () => {
     const t = clock.getElapsedTime();
@@ -433,15 +433,15 @@ export const ThreeCanvas = () => {
   );
 }
 
-type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.MeshLambertMaterial>
+type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 
 function makeRoughSphere(mesh: Mesh, spherePosition_clone: Float32Array, sphereNormals_clone: Float32Array, bassFr: number, treFr: number, damping: number) {
   const sphereCount = mesh.geometry.attributes.position.count;
 
   for (let i = 0; i < sphereCount; i++) {
     const offset = mesh.geometry.boundingSphere?.radius;
-    const amp = 7;
-    const time = window.performance.now() / 400;
+    const amp = 2;
+    const time = window.performance.now() / 600;
     // vertex.normalize();
     const rf = 0.00001;
     const uX = mesh.geometry.attributes.uv.getX(i) * Math.PI * 16;
@@ -460,13 +460,13 @@ function makeRoughSphere(mesh: Mesh, spherePosition_clone: Float32Array, sphereN
     const iz = i * 3 + 2;
 
     if (offset !== undefined) {
-      const distance = (offset + bassFr) + noise.noise3d(uX + time * rf * 7, uY + time * rf * 8, uZ + time * rf * 9) * amp * treFr;
+      const distance = (offset / 36 + bassFr) + noise.noise3d(uX + time * rf * 7, uY + time * rf * 8, uZ + time * rf * 9) * amp * treFr;
       // vertex.multiplyScalar(distance);
+      mesh.geometry.attributes.position.setX(i, spherePosition_clone[ix] + sphereNormals_clone[ix] * (distance + xsin + ycos));
+      mesh.geometry.attributes.position.setY(i, spherePosition_clone[iy] + sphereNormals_clone[iy] * (distance + xsin + ycos));
+      mesh.geometry.attributes.position.setZ(i, spherePosition_clone[iz] + sphereNormals_clone[iz] * (distance + xsin + ycos));
     }
 
-    mesh.geometry.attributes.position.setX(i, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
-    mesh.geometry.attributes.position.setY(i, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
-    mesh.geometry.attributes.position.setZ(i, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
   }
   mesh.geometry.computeVertexNormals();
   mesh.geometry.attributes.position.needsUpdate = true;
