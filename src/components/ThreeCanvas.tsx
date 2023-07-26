@@ -130,7 +130,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(10, 64, 32);
+  const sphereGeometry = new THREE.SphereGeometry(10, 128, 64);
   const sphereMaterial = new THREE.MeshPhongMaterial({
     color: "#00ff83",
     wireframe: true,
