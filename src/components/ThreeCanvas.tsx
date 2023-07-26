@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 // import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 // import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module';
+import { GUI } from 'dat.gui';
 
 const noise = new SimplexNoise();
 
@@ -157,12 +157,12 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   const sphereFolder = gui.addFolder('Sphere');
   const materialParams = {
-    sphereMeshColor: sphere.material.color.getHex(),
+    sphereMeshColor: plane.material.color.getHex(),
   };
-  sphereFolder.add(sphere.material, 'wireframe');
+  sphereFolder.add(plane.material, 'wireframe');
   sphereFolder
     .addColor(materialParams, 'sphereMeshColor')
-    .onChange((value) => sphere.material.color.set(value));
+    .onChange((value) => plane.material.color.set(value));
   
   sphereFolder.open();
   console.log(sphere);
