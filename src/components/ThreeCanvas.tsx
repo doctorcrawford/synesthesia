@@ -128,10 +128,10 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
+  const sphereGeometry = new THREE.SphereGeometry(10, 50, 50);
   const sphereMaterial = new THREE.MeshStandardMaterial({
     color: "#00ff83",
-    wireframe: true,
+    // wireframe: true,
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   group.add(sphere);
@@ -315,7 +315,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     const upperMaxFr = upperMax / upperHalfArray.length;
     const upperAvgFr = upperAvg / upperHalfArray.length;
 
-    makeRoughSphere(sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4), damping);
+    makeRoughSphere(sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 2, 0, 4), damping);
 
     makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
 
