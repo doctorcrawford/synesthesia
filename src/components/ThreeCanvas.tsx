@@ -29,45 +29,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   // camera.position.z = 10;
   camera.position.set(0, 0, 100);
 
-  //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
-  const sphereMaterial = new THREE.MeshLambertMaterial({
-    color: "#00ff83",
-    wireframe: true,
-  });
-  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  group.add(sphere);
 
-  const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
-  const planeMaterial = new THREE.ShaderMaterial({
-    color: 0xE1E100,
-    side: THREE.DoubleSide,
-    wireframe: true
-  });
 
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = 0.5 * Math.PI;
-  // plane.rotation.y = 0.5 * Math.PI;
-  plane.position.set(0, 30, 0);
-  group.add(plane);
-
-  const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane2.rotation.x = 0.5 * Math.PI;
-  plane2.position.set(0, -30, 0);
-  group.add(plane2);
-
-  //Light
-  const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
-  spotlight.intensity = 5.9;
-  spotlight.position.set(-30, 40, 20);
-  spotlight.lookAt(sphere.position);
-  spotlight.castShadow = true;
-  scene.add(spotlight);
-
-  const ambientLight = new THREE.AmbientLight(0xaaaaaa);
-  scene.add(ambientLight);
-
-  scene.add(group);
 
   //Controls
   const controls = new OrbitControls(camera, node);
@@ -112,6 +75,21 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
 
+  const uniforms = {
+    u_time: {
+      type: "f",
+      value: 1.0,
+    },
+    u_amplitude: {
+      type: "f",
+      value: 3.0,
+    },
+    u_data_arr: {
+      type: "float[64]",
+      value: dataArray,
+    },
+  };
+
   console.log(listener);
 
 
@@ -148,20 +126,44 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     throw new Error('no audio element');
   }
 
-  const uniforms = {
-    u_time: {
-      type: "f",
-      value: 1.0,
-    },
-    u_amplitude: {
-      type: "f",
-      value: 3.0,
-    },
-    u_data_arr: {
-      type: "float[64]",
-      value: dataArray,
-    },
-  };
+
+  //The Shapes
+  const sphereGeometry = new THREE.SphereGeometry(20, 50, 25);
+  const sphereMaterial = new THREE.MeshLambertMaterial({
+    color: "#00ff83",
+    wireframe: true,
+  });
+  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  group.add(sphere);
+
+  const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
+  const planeMaterial = new THREE.MeshLambertMaterial({
+    color: "#00ff83",
+    side: THREE.DoubleSide,
+    wireframe: true
+  });
+
+  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  plane.rotation.x = 0.5 * Math.PI;
+  // plane.rotation.y = 0.5 * Math.PI;
+  plane.position.set(0, 30, 0);
+  group.add(plane);
+
+  const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
+  plane2.rotation.x = 0.5 * Math.PI;
+  plane2.position.set(0, -30, 0);
+  group.add(plane2);
+
+  //Light
+  const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
+  spotlight.intensity = 5.9;
+  spotlight.position.set(-30, 40, 20);
+  spotlight.lookAt(sphere.position);
+  spotlight.castShadow = true;
+  scene.add(spotlight);
+
+  const ambientLight = new THREE.AmbientLight(0xaaaaaa);
+  scene.add(ambientLight);
 
 
   const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
@@ -227,24 +229,21 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   })
 
   //Analyser
-  analyser.getByteFrequencyData(dataArray);
-  console.log(analyser);
+  // analyser.getByteFrequencyData(dataArray);
 
+  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
+  // const overallAvg = avg(dataArray);
+  // const lowerMax = max(lowerHalfArray);
+  // const lowerAvg = avg(lowerHalfArray);
+  // const upperMax = max(upperHalfArray);
+  // const upperAvg = avg(upperHalfArray);
 
-  const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-  const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
-
-  const overallAvg = avg(dataArray);
-  const lowerMax = max(lowerHalfArray);
-  const lowerAvg = avg(lowerHalfArray);
-  const upperMax = max(upperHalfArray);
-  const upperAvg = avg(upperHalfArray);
-
-  const lowerMaxFr = lowerMax / lowerHalfArray.length;
-  const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-  const upperMaxFr = upperMax / upperHalfArray.length;
-  const upperAvgFr = upperAvg / upperHalfArray.length;
+  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
+  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+  // const upperMaxFr = upperMax / upperHalfArray.length;
+  // const upperAvgFr = upperAvg / upperHalfArray.length;
 
 
   // makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
@@ -284,9 +283,32 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   const planeCount = planeGeometry.attributes.position.count;
 
 
-  const animate = () => {
+  scene.add(group);
 
-    console.log(listener);
+  const animate = () => {
+    const t = clock.getElapsedTime();
+
+    analyser.getByteFrequencyData(dataArray);
+    uniforms.u_time.value = t;
+    uniforms.u_data_arr.value = dataArray;
+
+    ////
+    const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
+    const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
+
+    const overallAvg = avg(dataArray);
+    const lowerMax = max(lowerHalfArray);
+    const lowerAvg = avg(lowerHalfArray);
+    const upperMax = max(upperHalfArray);
+    const upperAvg = avg(upperHalfArray);
+
+    const lowerMaxFr = lowerMax / lowerHalfArray.length;
+    const lowerAvgFr = lowerAvg / lowerHalfArray.length;
+    const upperMaxFr = upperMax / upperHalfArray.length;
+    const upperAvgFr = upperAvg / upperHalfArray.length;
+
+    makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
+
 
     // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
     //   for (const vertex in mesh.position) {
@@ -302,7 +324,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     //   });
 
     // Update sphere vertices
-    const t = clock.getElapsedTime();
+
     sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
       const ns = noise.noise4d(p.x, p.y, p.z, t);
       const amp = 7;
@@ -326,14 +348,14 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
     // Update plane vertices
-    const now = Date.now() / 300;
-    for (let i = 0; i < planeCount; i++) {
-      const x = planeGeometry.attributes.position.getX(i);
-      const y = planeGeometry.attributes.position.getY(i);
-      const xsin = Math.sin(x + now);
-      const ycos = Math.cos(y + now);
-      planeGeometry.attributes.position.setZ(i, xsin + ycos);
-    }
+    // const now = Date.now() / 300;
+    // for (let i = 0; i < planeCount; i++) {
+    //   const x = planeGeometry.attributes.position.getX(i);
+    //   const y = planeGeometry.attributes.position.getY(i);
+    //   const xsin = Math.sin(x + now);
+    //   const ycos = Math.cos(y + now);
+    //   planeGeometry.attributes.position.setZ(i, xsin + ycos);
+    // }
     planeGeometry.computeVertexNormals();
     planeGeometry.attributes.position.needsUpdate = true;
 
@@ -421,38 +443,46 @@ export const ThreeCanvas = () => {
 //   mesh.geometry.computeFaceNormals();
 // }
 
-// function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>, distortionFr: number) {
-//   const positionAtrribute = mesh.geometry.getAttribute('position');
-//   for (let i 0 )
+function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>, distortionFr: number) {
+  // const positionAtrribute = mesh.geometry.getAttribute('position');
+  // for (let i 0 )
 
-//     mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
-//       const amp = 2;
-//       const time = Date.now();
-//       const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
-//       vertex.z = distance;
-//     });
-//   mesh.geometry.verticesNeedUpdate = true;
-//   mesh.geometry.normalsNeedUpdate = true;
-//   mesh.geometry.computeVertexNormals();
-//   mesh.geometry.computeFaceNormals();
-// }
+  //   mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
+  //     const amp = 2;
+  //     const time = Date.now();
+  //     const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
+  //     vertex.z = distance;
+  //   });
+
+  const now = Date.now() / 300;
+  const planeCount = mesh.geometry.attributes.position.count;
+
+  for (let i = 0; i < planeCount; i++) {
+    const x = mesh.geometry.attributes.position.getX(i);
+    const y = mesh.geometry.attributes.position.getY(i);
+    const xsin = Math.sin(x + now);
+    const ycos = Math.cos(y + now);
+    mesh.geometry.attributes.position.setZ(i, xsin + ycos);
+  }
+  mesh.geometry.computeVertexNormals();
+  mesh.geometry.attributes.position.needsUpdate = true;
 
 
-function fractionate(val: number, minVal: number, maxVal: number) {
-  return (val - minVal) / (maxVal - minVal);
-}
+  function fractionate(val: number, minVal: number, maxVal: number) {
+    return (val - minVal) / (maxVal - minVal);
+  }
 
-function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
-  const fr = fractionate(val, minVal, maxVal);
-  const delta = outMax - outMin;
-  return outMin + (fr * delta);
-}
+  function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+    const fr = fractionate(val, minVal, maxVal);
+    const delta = outMax - outMin;
+    return outMin + (fr * delta);
+  }
 
-function avg(arr: Uint8Array) {
-  const total = arr.reduce(function (sum, b) { return sum + b; });
-  return (total / arr.length);
-}
+  function avg(arr: Uint8Array) {
+    const total = arr.reduce(function (sum, b) { return sum + b; });
+    return (total / arr.length);
+  }
 
-function max(arr: Uint8Array) {
-  return arr.reduce(function (a, b) { return Math.max(a, b); })
-}
+  function max(arr: Uint8Array) {
+    return arr.reduce(function (a, b) { return Math.max(a, b); })
+  }
