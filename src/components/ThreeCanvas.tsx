@@ -5,12 +5,14 @@ import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 // import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 // import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
+import { GUI } from 'three/examples/jsm/libs/dat.gui.module';
 
 const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
   const group = new THREE.Group();
+  const gui = new GUI();
 
   const sizes = {
     width: window.innerWidth,
@@ -128,24 +130,23 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(10, 50, 50);
-  const sphereMaterial = new THREE.MeshStandardMaterial({
+  const sphereGeometry = new THREE.SphereGeometry(10, 64, 32);
+  const sphereMaterial = new THREE.MeshPhongMaterial({
     color: "#00ff83",
-    // wireframe: true,
+    wireframe: true,
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   group.add(sphere);
 
   const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
-  const planeMaterial = new THREE.MeshLambertMaterial({
+  const planeMaterial = new THREE.MeshPhongMaterial({
     color: "#00ff83",
-    side: THREE.DoubleSide,
+    // side: THREE.DoubleSide,
     wireframe: true
   });
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = 0.5 * Math.PI;
-  // plane.rotation.y = 0.5 * Math.PI;
   plane.position.set(0, 30, 0);
   group.add(plane);
 
@@ -153,6 +154,18 @@ const initThreeJsScene = (node: HTMLDivElement) => {
   plane2.rotation.x = 0.5 * Math.PI;
   plane2.position.set(0, -30, 0);
   group.add(plane2);
+
+  const sphereFolder = gui.addFolder('Sphere');
+  const materialParams = {
+    sphereMeshColor: sphere.material.color.getHex(),
+  };
+  sphereFolder.add(sphere.material, 'wireframe');
+  sphereFolder
+    .addColor(materialParams, 'sphereMeshColor')
+    .onChange((value) => sphere.material.color.set(value));
+  
+  sphereFolder.open();
+  console.log(sphere);
 
   //Light
   const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
@@ -443,7 +456,7 @@ function makeRoughSphere(mesh: Mesh, spherePosition_clone: Float32Array, sphereN
     const amp = 2;
     const time = window.performance.now() / 600;
     // vertex.normalize();
-    const rf = 0.00001;
+    const rf = 0.000001;
     const uX = mesh.geometry.attributes.uv.getX(i) * Math.PI * 16;
     const uY = mesh.geometry.attributes.uv.getY(i) * Math.PI * 16;
     const uZ = mesh.geometry.attributes.uv.getZ(i) * Math.PI * 16;
