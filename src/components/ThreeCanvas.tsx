@@ -6,7 +6,7 @@ import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 // import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
 // import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 
-// const noise = new SimplexNoise();
+const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement) => {
   const scene = new THREE.Scene();
@@ -275,7 +275,7 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     nPosSphere.push(v3Sphere.clone());
   }
   sphereGeometry.userData.nPosSphere = nPosSphere;
-  const noise = new SimplexNoise();
+  // const noise = new SimplexNoise();
 
   const clock = new THREE.Clock();
   const radius = 10;
@@ -325,17 +325,17 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
     // Update sphere vertices
 
-    sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
-      const ns = noise.noise4d(p.x, p.y, p.z, t);
-      const amp = 7;
-      const rf = 2;
-      const distance = (radius + modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8)) + noise.noise3d(p.x + t * rf * 7, p.y + t * rf * 8, p.z + t * rf * 9) * amp * modulate(upperAvgFr, 0, 1, 0, 4);
+    // sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
+    //   const ns = noise.noise4d(p.x, p.y, p.z, t);
+    //   const amp = 7;
+    //   const rf = 2;
+    //   const distance = (radius + modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8)) + noise.noise3d(p.x + t * rf * 7, p.y + t * rf * 8, p.z + t * rf * 9) * amp * modulate(upperAvgFr, 0, 1, 0, 4);
 
-      v3Sphere.copy(p).multiplyScalar(amp).addScaledVector(p, distance);
-      posSphere.setXYZ(i, v3Sphere.x, v3Sphere.y, v3Sphere.z);
-    });
-    sphereGeometry.computeVertexNormals();
-    posSphere.needsUpdate = true;
+    //   v3Sphere.copy(p).multiplyScalar(amp).addScaledVector(p, distance);
+    //   posSphere.setXYZ(i, v3Sphere.x, v3Sphere.y, v3Sphere.z);
+    // });
+    // sphereGeometry.computeVertexNormals();
+    // posSphere.needsUpdate = true;
 
     // NOT QUITE WORKING: ANOTHER WAY TO UPDATE PLANE VERTICES
     // planeGeometry.userData.nPosPlane.forEach((p: THREE.Vector2, j: number) => {
@@ -450,39 +450,42 @@ function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambert
   //   mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
   //     const amp = 2;
   //     const time = Date.now();
-  //     const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
+  // const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * 4;
   //     vertex.z = distance;
   //   });
 
   const now = Date.now() / 300;
   const planeCount = mesh.geometry.attributes.position.count;
+  const amp = 2;
 
   for (let i = 0; i < planeCount; i++) {
     const x = mesh.geometry.attributes.position.getX(i);
     const y = mesh.geometry.attributes.position.getY(i);
     const xsin = Math.sin(x + now);
     const ycos = Math.cos(y + now);
-    mesh.geometry.attributes.position.setZ(i, xsin + ycos);
+    const distance = (noise.noise(x + now * 0.0003, y + now * 0.0001) + 0) * distortionFr * amp;
+    mesh.geometry.attributes.position.setZ(i, distance);
   }
   mesh.geometry.computeVertexNormals();
   mesh.geometry.attributes.position.needsUpdate = true;
+}
 
 
-  function fractionate(val: number, minVal: number, maxVal: number) {
-    return (val - minVal) / (maxVal - minVal);
-  }
+function fractionate(val: number, minVal: number, maxVal: number) {
+  return (val - minVal) / (maxVal - minVal);
+}
 
-  function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
-    const fr = fractionate(val, minVal, maxVal);
-    const delta = outMax - outMin;
-    return outMin + (fr * delta);
-  }
+function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+  const fr = fractionate(val, minVal, maxVal);
+  const delta = outMax - outMin;
+  return outMin + (fr * delta);
+}
 
-  function avg(arr: Uint8Array) {
-    const total = arr.reduce(function (sum, b) { return sum + b; });
-    return (total / arr.length);
-  }
+function avg(arr: Uint8Array) {
+  const total = arr.reduce(function (sum, b) { return sum + b; });
+  return (total / arr.length);
+}
 
-  function max(arr: Uint8Array) {
-    return arr.reduce(function (a, b) { return Math.max(a, b); })
-  }
+function max(arr: Uint8Array) {
+  return arr.reduce(function (a, b) { return Math.max(a, b); })
+}
