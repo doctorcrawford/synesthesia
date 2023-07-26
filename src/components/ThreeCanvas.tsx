@@ -285,6 +285,14 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
   scene.add(group);
 
+  const spherePosition_clone = JSON.parse(
+    JSON.stringify(sphereGeometry.attributes.position.array)
+  ) as Float32Array;
+  const sphereNormals_clone = JSON.parse(
+    JSON.stringify(sphereGeometry.attributes.normal.array)
+  ) as Float32Array;
+  const damping = 0.5;
+
   const animate = () => {
     const t = clock.getElapsedTime();
 
@@ -306,6 +314,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     const lowerAvgFr = lowerAvg / lowerHalfArray.length;
     const upperMaxFr = upperMax / upperHalfArray.length;
     const upperAvgFr = upperAvg / upperHalfArray.length;
+
+    makeRoughSphere(sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4), damping);
 
     makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
 
@@ -423,38 +433,48 @@ export const ThreeCanvas = () => {
   );
 }
 
-// type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
+type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.MeshLambertMaterial>
 
-// function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
-//   for (const vertex in mesh.position) {
-//     const offset = mesh.geometry.boundingSphere?.radius;
-//     const amp = 7;
-//     const time = window.performance.now();
-//     // vertex.normalize();
-//     const rf = 0.00001;
-//     if (offset !== undefined) {
-//       const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-//       vertex.multiplyScalar(distance);
-//     }
-//   });
-//   mesh.geometry.verticesNeedUpdate = true;
-//   mesh.geometry.normalsNeedUpdate = true;
-//   mesh.geometry.computeVertexNormals();
-//   mesh.geometry.computeFaceNormals();
-// }
+function makeRoughSphere(mesh: Mesh, spherePosition_clone: Float32Array, sphereNormals_clone: Float32Array, bassFr: number, treFr: number, damping: number) {
+  const sphereCount = mesh.geometry.attributes.position.count;
 
-function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>, distortionFr: number) {
-  // const positionAtrribute = mesh.geometry.getAttribute('position');
-  // for (let i 0 )
+  for (let i = 0; i < sphereCount; i++) {
+    const offset = mesh.geometry.boundingSphere?.radius;
+    const amp = 7;
+    const time = window.performance.now() / 400;
+    // vertex.normalize();
+    const rf = 0.00001;
+    const uX = mesh.geometry.attributes.uv.getX(i) * Math.PI * 16;
+    const uY = mesh.geometry.attributes.uv.getY(i) * Math.PI * 16;
+    const uZ = mesh.geometry.attributes.uv.getZ(i) * Math.PI * 16;
 
-  //   mesh.geometry.vertices.forEach(function (vertex: number, i: number) {
-  //     const amp = 2;
-  //     const time = Date.now();
-  // const distance = (noise.noise(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * 4;
-  //     vertex.z = distance;
-  //   });
+    // calculate current vertex wave height
+    const xangle = (uX + time);
+    const xsin = Math.sin(xangle) * damping;
+    const yangle = (uY + time);
+    const ycos = Math.cos(yangle) * damping;
 
-  const now = Date.now() / 300;
+    // indices
+    const ix = i * 3;
+    const iy = i * 3 + 1;
+    const iz = i * 3 + 2;
+
+    if (offset !== undefined) {
+      const distance = (offset + bassFr) + noise.noise3d(uX + time * rf * 7, uY + time * rf * 8, uZ + time * rf * 9) * amp * treFr;
+      // vertex.multiplyScalar(distance);
+    }
+
+    mesh.geometry.attributes.position.setX(i, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
+    mesh.geometry.attributes.position.setY(i, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
+    mesh.geometry.attributes.position.setZ(i, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
+  }
+  mesh.geometry.computeVertexNormals();
+  mesh.geometry.attributes.position.needsUpdate = true;
+
+}
+
+function makeRoughGround(mesh: Mesh, distortionFr: number) {
+  const now = Date.now() / 400;
   const planeCount = mesh.geometry.attributes.position.count;
   const amp = 2;
 
@@ -464,28 +484,28 @@ function makeRoughGround(mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambert
     const xsin = Math.sin(x + now);
     const ycos = Math.cos(y + now);
     const distance = (noise.noise(x + now * 0.0003, y + now * 0.0001) + 0) * distortionFr * amp;
-    mesh.geometry.attributes.position.setZ(i, distance);
+    mesh.geometry.attributes.position.setZ(i, distance + xsin + ycos);
   }
   mesh.geometry.computeVertexNormals();
   mesh.geometry.attributes.position.needsUpdate = true;
 }
 
 
-function fractionate(val: number, minVal: number, maxVal: number) {
+function fractionate(val: number, minVal: number, maxVal: number): number {
   return (val - minVal) / (maxVal - minVal);
 }
 
-function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number) {
+function modulate(val: number, minVal: number, maxVal: number, outMin: number, outMax: number): number {
   const fr = fractionate(val, minVal, maxVal);
   const delta = outMax - outMin;
   return outMin + (fr * delta);
 }
 
-function avg(arr: Uint8Array) {
+function avg(arr: Uint8Array): number {
   const total = arr.reduce(function (sum, b) { return sum + b; });
   return (total / arr.length);
 }
 
-function max(arr: Uint8Array) {
+function max(arr: Uint8Array): number {
   return arr.reduce(function (a, b) { return Math.max(a, b); })
 }
