@@ -31,9 +31,12 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 11:00: [more three.js](https://www.youtube.com/watch?v=XXzqSAt3UIw&list=PLjcjAqAnHd1EIxV4FSZIiJZvsdrBc1Xho&index=2)
 * 11:20: [three.js react portfolio tutorial](https://www.youtube.com/watch?v=0fYi8SGA20k)
 
-#### Tuesday, 7/24
+#### Tuesday, 7/25
 * 7:15: [three.js update vertices](https://threejs.org/docs/#manual/en/introduction/How-to-update-things)
 * 7:45: [three.js still update vertices](https://discourse.threejs.org/t/update-vertices-of-a-sphere/10863)
 * 8:00: [how to update vertices/morph 3d objects/buffergeometry](https://www.youtube.com/watch?v=ZYi0xGp882I&t=98s)
 * 9:55: [updating vertices](https://jsfiddle.net/prisoner849/wnash36c/)
 * 2:50: [audio analyser](https://www.youtube.com/watch?v=tQL1VLTJTnc)
+
+#### Wednewday, 7/26
+* 7:15: [spotify audio analysis](https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis)
