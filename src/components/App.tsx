@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 // import WebPlayback from './WebPlayback';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Audio from './Audio';
+import AudioInput from './AudioInput';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Navbar />
         <Header />
+        <AudioInput />
         <Audio />
         <Routes>
           <Route path='/' element={<ThreeCanvas />} />

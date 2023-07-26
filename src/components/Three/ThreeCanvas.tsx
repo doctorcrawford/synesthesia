@@ -10,6 +10,8 @@ import { makeRoughGround, makeRoughSphere, modulate, avg, max } from './Modulate
 const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement): void => {
+
+  navigator.mediaSession
   const scene = new THREE.Scene();
   const group = new THREE.Group();
   const gui = new GUI();
@@ -32,7 +34,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   camera.position.set(0, 0, 100);
 
-  //Controls
+  // Controls
   const controls = new OrbitControls(camera, node);
   controls.enableDamping = true;
   controls.enablePan = false;
@@ -40,13 +42,13 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   controls.autoRotate = true;
   controls.autoRotateSpeed = 1;
 
-  //Resize
+  // Resize
   window.addEventListener('resize', () => {
     //Update Sizes
     sizes.width = window.innerWidth;
     sizes.height = window.innerHeight;
 
-    //Update Camera
+    // Update Camera
     camera.aspect = sizes.width / sizes.height;
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width, sizes.height);
@@ -66,11 +68,11 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   const gainNode = audioContext.createGain();
   const pannerOptions = { pan: 0 };
   const panner = new StereoPannerNode(audioContext, pannerOptions);
-  source.connect(gainNode)
+  source
+    .connect(gainNode)
     .connect(panner)
-    .connect(analyser);
-  // .connect(audioContext.destination);
-  analyser.connect(audioContext.destination);
+    .connect(analyser)
+    .connect(audioContext.destination);
   analyser.fftSize = 1024;
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
