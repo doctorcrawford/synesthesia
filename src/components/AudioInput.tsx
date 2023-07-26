@@ -15,12 +15,11 @@ function handleStream() {
     const context = new AudioContext();
     const source = context.createMediaStreamSource(stream);
 
-    await context.audioWorklet.addModule()
-    if (window.URL) {
-      player.srcObject = stream;
-    } else {
-      player.src = stream;
-    }
+    await context.audioWorklet.addModule('processor.ts');
+    const worklet = new AudioWorkletNode(context, "worklet-processor");
+
+    source.connect(worklet);
+    worklet.connect(context.destination);
   }
 
   navigator.mediaDevices
