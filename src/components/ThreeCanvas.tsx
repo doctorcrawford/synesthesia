@@ -3,8 +3,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-// import { createNoise2D, createNoise3D, createNoise4D } from 'simplex-noise';
-// import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 import { GUI } from 'dat.gui';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 
@@ -244,33 +242,6 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     }
   })
 
-  //Analyser
-  // analyser.getByteFrequencyData(dataArray);
-
-  // const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-  // const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
-
-  // const overallAvg = avg(dataArray);
-  // const lowerMax = max(lowerHalfArray);
-  // const lowerAvg = avg(lowerHalfArray);
-  // const upperMax = max(upperHalfArray);
-  // const upperAvg = avg(upperHalfArray);
-
-  // const lowerMaxFr = lowerMax / lowerHalfArray.length;
-  // const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-  // const upperMaxFr = upperMax / upperHalfArray.length;
-  // const upperAvgFr = upperAvg / upperHalfArray.length;
-
-
-  // makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
-  // makeRoughGround(plane2, modulate(lowerAvgFr, 0, 1, 0.5, 4));
-
-  // makeRoughSphere(sphere, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
-
-  // group.rotation.y += 0.005;
-
-
-
   // plane movement
   // const nPosPlane = [];
   // const v2Plane = new THREE.Vector2();
@@ -291,7 +262,6 @@ const initThreeJsScene = (node: HTMLDivElement) => {
     nPosSphere.push(v3Sphere.clone());
   }
   sphereGeometry.userData.nPosSphere = nPosSphere;
-  // const noise = new SimplexNoise();
 
   const clock = new THREE.Clock();
   const radius = 10;
@@ -335,86 +305,8 @@ const initThreeJsScene = (node: HTMLDivElement) => {
 
     makeRoughGround(plane, modulate(lowerAvgFr, 0, 1, 0.5, 4));
 
-
-    // function makeRoughSphere(mesh: Mesh, bassFr: number, treFr: number) {
-    //   for (const vertex in mesh.position) {
-    //     const offset = mesh.geometry.boundingSphere?.radius;
-    //     const amp = 7;
-    //     const time = window.performance.now();
-    //     // vertex.normalize();
-    //     const rf = 0.00001;
-    //     if (offset !== undefined) {
-    //       const distance = (offset + bassFr) + noise.noise3d(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-    //       vertex.multiplyScalar(distance);
-    //     }
-    //   });
-
-    // Update sphere vertices
-
-    // sphereGeometry.userData.nPosSphere.forEach((p: THREE.Vector3, i: number) => {
-    //   const ns = noise.noise4d(p.x, p.y, p.z, t);
-    //   const amp = 7;
-    //   const rf = 2;
-    //   const distance = (radius + modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8)) + noise.noise3d(p.x + t * rf * 7, p.y + t * rf * 8, p.z + t * rf * 9) * amp * modulate(upperAvgFr, 0, 1, 0, 4);
-
-    //   v3Sphere.copy(p).multiplyScalar(amp).addScaledVector(p, distance);
-    //   posSphere.setXYZ(i, v3Sphere.x, v3Sphere.y, v3Sphere.z);
-    // });
-    // sphereGeometry.computeVertexNormals();
-    // posSphere.needsUpdate = true;
-
-    // NOT QUITE WORKING: ANOTHER WAY TO UPDATE PLANE VERTICES
-    // planeGeometry.userData.nPosPlane.forEach((p: THREE.Vector2, j: number) => {
-    //   const ns = noise.noise(p.x, p.y);
-    //   v2Plane.copy(p).multiplyScalar(amp).addScaledVector(p, ns);
-    //   posPlane.setXY(j, v2Plane.x, v2Plane.y);
-    // });
-    // planeGeometry.computeVertexNormals();
-    // posPlane.needsUpdate = true;
-
-
-    // Update plane vertices
-    // const now = Date.now() / 300;
-    // for (let i = 0; i < planeCount; i++) {
-    //   const x = planeGeometry.attributes.position.getX(i);
-    //   const y = planeGeometry.attributes.position.getY(i);
-    //   const xsin = Math.sin(x + now);
-    //   const ycos = Math.cos(y + now);
-    //   planeGeometry.attributes.position.setZ(i, xsin + ycos);
-    // }
     planeGeometry.computeVertexNormals();
     planeGeometry.attributes.position.needsUpdate = true;
-
-
-    //  ANOTHER WAY TO UPDATE SPHERE VERTICES
-
-    // //Update sphere vertices
-    // // iterate all vertices
-    // sphereGeometry.userData.nPos.forEach()
-    // for (let j = 0; j < sphereCount; j++) {
-    //   //use uvs to calculate wave
-    //   const uX = sphereGeometry.attributes.uv.getX(j) * Math.PI * 16;
-    //   const uY = sphereGeometry.attributes.uv.getY(j) * Math.PI * 16;
-
-    //   // calculate current vertex wave height
-    //   const xangle = (uX + now);
-    //   const xsin = Math.sin(xangle) * damping;
-    //   const yangle = (uY + now);
-    //   const ycos = Math.cos(yangle) * damping;
-
-    //   // indices
-    //   const ix = j * 3;
-    //   const iy = j * 3 + 1;
-    //   const iz = j * 3 + 2;
-
-    //   //set new position
-    //   sphereGeometry
-    //   sphereGeometry.attributes.position.setX(j, spherePosition_clone[ix] + sphereNormals_clone[ix] * (xsin + ycos));
-    //   sphereGeometry.attributes.position.setY(j, spherePosition_clone[iy] + sphereNormals_clone[iy] * (xsin + ycos));
-    //   sphereGeometry.attributes.position.setZ(j, spherePosition_clone[iz] + sphereNormals_clone[iz] * (xsin + ycos));
-    // }
-    // sphereGeometry.computeVertexNormals();
-    // sphereGeometry.attributes.position.needsUpdate = true;
 
     controls.update();
     requestAnimationFrame(animate);
