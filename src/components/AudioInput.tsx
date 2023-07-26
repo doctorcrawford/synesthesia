@@ -1,5 +1,5 @@
 export default function AudioInput() {
-  handleStream();
+  // handleStream();
   return (
     <>
       <input type="file" accept="audio/*" capture />
@@ -8,21 +8,21 @@ export default function AudioInput() {
   )
 }
 
-function handleStream() {
-  const player = document.getElementById('player') as HTMLAudioElement;
+// function handleStream() {
+//   const player = document.getElementById('player') as HTMLAudioElement;
 
-  const handleSuccess = async (stream: MediaStream) => {
-    const context = new AudioContext();
-    const source = context.createMediaStreamSource(stream);
+//   const handleSuccess = async (stream: MediaStream) => {
+//     const context = new AudioContext();
+//     const source = context.createMediaStreamSource(stream);
 
-    await context.audioWorklet.addModule('processor.ts');
-    const worklet = new AudioWorkletNode(context, "worklet-processor");
+//     await context.audioWorklet.addModule('processor.ts');
+//     const worklet = new AudioWorkletNode(context, "worklet-processor");
 
-    source.connect(worklet);
-    worklet.connect(context.destination);
-  }
+//     source.connect(worklet);
+//     worklet.connect(context.destination);
+//   }
 
-  navigator.mediaDevices
-    .getUserMedia({ audio: true, video: false })
-    .then(handleSuccess);
-}
+//   navigator.mediaDevices
+//     .getUserMedia({ audio: true, video: false })
+//     .then(handleSuccess);
+// }
