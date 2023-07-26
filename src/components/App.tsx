@@ -1,4 +1,4 @@
-import { ThreeCanvas } from './ThreeCanvas'
+import { ThreeCanvas } from './Three/ThreeCanvas'
 import Header from './Header';
 import Navbar from './Navbar';
 // import SpotifySDK from './SpotifySDK';
