@@ -48,28 +48,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     renderer.setSize(sizes.width, sizes.height);
   })
 
-  // Audio
-  const listener = new THREE.AudioListener();
-  camera.add(listener);
-  const sound = new THREE.Audio(listener);
-  sound.autoplay = true;
-  sound.setLoop(true);
-
-  const audioContext = new window.AudioContext();
-  const audioElement = document.querySelector('audio') as HTMLMediaElement;
-  const source = audioContext.createMediaElementSource(audioElement);
-  const analyser = audioContext.createAnalyser();
-  const gainNode = audioContext.createGain();
-  const pannerOptions = { pan: 0 };
-  const panner = new StereoPannerNode(audioContext, pannerOptions);
-  source
-    .connect(gainNode)
-    .connect(panner)
-    .connect(analyser)
-    .connect(audioContext.destination);
-  analyser.fftSize = 1024;
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
+  const [audioContext, audioElement, dataArray, gainNode, panner, analyser] = setAudio(camera);
 
   const uniforms = {
     u_time: {
@@ -252,15 +231,12 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
     const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-    // const overallAvg = avg(dataArray);
     const lowerMax = max(lowerHalfArray);
     const lowerAvg = avg(lowerHalfArray);
-    // const upperMax = max(upperHalfArray);
     const upperAvg = avg(upperHalfArray);
 
     const lowerMaxFr = lowerMax / lowerHalfArray.length;
     const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-    // const upperMaxFr = upperMax / upperHalfArray.length;
     const upperAvgFr = upperAvg / upperHalfArray.length;
 
     makeRoughSphere(noise, sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 2, 0, 4), damping);
@@ -273,7 +249,6 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     controls.update();
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    // stats.update();
   }
   animate();
 }
@@ -302,4 +277,29 @@ export const ThreeCanvas = () => {
       ref={threeDivRef}
     ></div>
   );
+}
+
+function setAudio(camera: THREE.PerspectiveCamera): [AudioContext, HTMLMediaElement, Uint8Array, GainNode, StereoPannerNode, AnalyserNode] {
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+  const sound = new THREE.Audio(listener);
+  sound.autoplay = true;
+  sound.setLoop(true);
+  const audioContext = new window.AudioContext();
+  const audioElement = document.querySelector('audio') as HTMLMediaElement;
+  const source = audioContext.createMediaElementSource(audioElement);
+  const analyser = audioContext.createAnalyser();
+  const gainNode = audioContext.createGain();
+  const pannerOptions = { pan: 0 };
+  const panner = new StereoPannerNode(audioContext, pannerOptions);
+  source
+    .connect(gainNode)
+    .connect(panner)
+    .connect(analyser)
+    .connect(audioContext.destination);
+  analyser.fftSize = 1024;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  return [audioContext, audioElement, dataArray, gainNode, panner, analyser];
 }
