@@ -65,38 +65,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     },
   };
 
-  const playButton = document.getElementById('play-button');
-  if (playButton) {
-    playButton?.addEventListener(
-      "click",
-      () => {
-        // Check if context is in suspended state (autoplay policy)
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-
-        // Play or pause track depending on state
-        if (playButton.dataset.playing === "false") {
-          audioElement.play();
-          playButton.dataset.playing = "true";
-        } else if (playButton.dataset.playing === "true") {
-          audioElement.pause();
-          playButton.dataset.playing = "false";
-        }
-      },
-      false,
-    );
-
-    audioElement.addEventListener(
-      'ended',
-      () => {
-        playButton.dataset.playing = 'false';
-      },
-      false,
-    );
-  } else {
-    throw new Error('no audio element');
-  }
+  setPlayButton(audioContext, audioElement);
 
 
   //The Shapes
@@ -302,4 +271,39 @@ function setAudio(camera: THREE.PerspectiveCamera): [AudioContext, HTMLMediaElem
   const dataArray = new Uint8Array(bufferLength);
 
   return [audioContext, audioElement, dataArray, gainNode, panner, analyser];
+}
+
+function setPlayButton(audioContext: AudioContext, audioElement: HTMLMediaElement) {
+  const playButton = document.getElementById('play-button');
+  if (playButton) {
+    playButton?.addEventListener(
+      "click",
+      () => {
+        // Check if context is in suspended state (autoplay policy)
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+
+        // Play or pause track depending on state
+        if (playButton.dataset.playing === "false") {
+          audioElement.play();
+          playButton.dataset.playing = "true";
+        } else if (playButton.dataset.playing === "true") {
+          audioElement.pause();
+          playButton.dataset.playing = "false";
+        }
+      },
+      false,
+    );
+
+    audioElement.addEventListener(
+      'ended',
+      () => {
+        playButton.dataset.playing = 'false';
+      },
+      false,
+    );
+  } else {
+    throw new Error('no audio element');
+  }
 }
