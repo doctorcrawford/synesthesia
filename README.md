@@ -10,6 +10,12 @@
 
 A music visualizer that has digital artwork that is interactive with the music you play.
 
+## Technologies Used
+
+* Three.js
+* React
+* Typescript
+
 ### Research & Planning Log
 #### Tuesday, 7/4
 * 9:40: set up base react project
@@ -49,3 +55,9 @@ A music visualizer that has digital artwork that is interactive with the music y
 * 1:00: [web audio api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API)
 * 2:45: [audio worklet](https://developer.chrome.com/blog/audio-worklet/)
 * 3:15: [audio input file](https://stackoverflow.com/questions/54932711/display-and-play-audio-file-selected-in-input-javascript)
+
+## License
+
+[MIT](https://opensource.org/license/mit)
+
+Copyright (c) 2023 Kyle Crawford
