@@ -275,15 +275,15 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     const lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
     const upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
 
-    const overallAvg = avg(dataArray);
+    // const overallAvg = avg(dataArray);
     const lowerMax = max(lowerHalfArray);
     const lowerAvg = avg(lowerHalfArray);
-    const upperMax = max(upperHalfArray);
+    // const upperMax = max(upperHalfArray);
     const upperAvg = avg(upperHalfArray);
 
     const lowerMaxFr = lowerMax / lowerHalfArray.length;
     const lowerAvgFr = lowerAvg / lowerHalfArray.length;
-    const upperMaxFr = upperMax / upperHalfArray.length;
+    // const upperMaxFr = upperMax / upperHalfArray.length;
     const upperAvgFr = upperAvg / upperHalfArray.length;
 
     makeRoughSphere(noise, sphere, spherePosition_clone, sphereNormals_clone, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 2, 0, 4), damping);

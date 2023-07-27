@@ -1,4 +1,4 @@
-import Track from './../resources/radio-man.mp3';
+import Track from './../../resources/radio-man.mp3';
 
 export default function Audio() {
   return (
