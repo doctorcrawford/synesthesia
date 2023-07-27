@@ -28,13 +28,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   camera.position.set(0, 0, 100);
 
-  // Controls
-  const controls = new OrbitControls(camera, node);
-  controls.enableDamping = true;
-  controls.enablePan = false;
-  controls.enableZoom = false;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 1;
+  const controls = setControls(camera, node);
 
   // Resize
   window.addEventListener('resize', () => {
@@ -306,4 +300,15 @@ function setPlayButton(audioContext: AudioContext, audioElement: HTMLMediaElemen
   } else {
     throw new Error('no audio element');
   }
+}
+
+function setControls(camera: THREE.PerspectiveCamera, node: HTMLDivElement): OrbitControls {
+  const controls = new OrbitControls(camera, node);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1;
+
+  return controls;
 }
