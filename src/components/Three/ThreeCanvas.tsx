@@ -11,7 +11,6 @@ const noise = new SimplexNoise();
 
 const initThreeJsScene = (node: HTMLDivElement): void => {
 
-  navigator.mediaSession
   const scene = new THREE.Scene();
   const group = new THREE.Group();
   const gui = new GUI();
@@ -62,7 +61,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   sound.setLoop(true);
 
   const audioContext = new window.AudioContext();
-  const audioElement = document.querySelector('player') as HTMLMediaElement;
+  const audioElement = document.querySelector('audio') as HTMLMediaElement;
   const source = audioContext.createMediaElementSource(audioElement);
   const analyser = audioContext.createAnalyser();
   const gainNode = audioContext.createGain();
