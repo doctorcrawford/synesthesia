@@ -3,8 +3,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { GUI } from 'dat.gui';
-import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { makeRoughGround, makeRoughSphere, modulate, avg, max } from './Modulate';
 
 const noise = new SimplexNoise();
@@ -13,9 +11,6 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   const scene = new THREE.Scene();
   const group = new THREE.Group();
-  const gui = new GUI();
-  const stats = new Stats();
-  document.body.appendChild(stats.dom);
 
   const sizes = {
     width: window.innerWidth,
@@ -91,9 +86,6 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     },
   };
 
-  console.log(listener);
-
-
   const playButton = document.getElementById('play-button');
   if (playButton) {
     playButton?.addEventListener(
@@ -154,18 +146,6 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   plane2.position.set(0, -30, 0);
   group.add(plane2);
 
-  const planeFolder = gui.addFolder('Plane');
-  const materialParams = {
-    planeMeshColor: plane.material.color.getHex(),
-  };
-  planeFolder.add(plane.material, 'wireframe');
-  planeFolder
-    .addColor(materialParams, 'planeMeshColor')
-    .onChange((value) => plane.material.color.set(value));
-
-  planeFolder.open();
-  console.log(sphere);
-
   //Light
   const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
   spotlight.intensity = 5.9;
@@ -204,8 +184,6 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   } else {
     throw new Error('no panner control');
   }
-
-
 
   //Timeline
   const tl = gsap.timeline({ defaults: { duration: 1 } })
@@ -295,7 +273,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     controls.update();
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-    stats.update();
+    // stats.update();
   }
   animate();
 }
