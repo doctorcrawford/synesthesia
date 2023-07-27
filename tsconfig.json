@@ -18,7 +18,7 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "three/examples/jsm/libs/dat.gui.module": ["./node_modules/@types/dat.gui"]
