@@ -9,7 +9,6 @@ A music visualizer that has digital artwork that is interactive with the music y
 
 List the absolute minimum features the project requires to meet this purpose or goal:
 * A piece of digital art
-* The ability for the user to pick a song from some streaming service
 * Interactivity between the music and the artwork
 
 What tools, frameworks, libraries, APIs, modules and/or other resources (whatever is specific to your track, and your language) will you use to create this MVP? List them all here. Be specific.
@@ -21,6 +20,7 @@ What tools, frameworks, libraries, APIs, modules and/or other resources (whateve
 If you finish developing the minimum viable product (MVP) with time to spare, what will you work on next? Describe these features here: Be specific.
 * More dynamic/multiple pieces of art to choose from
 * Different levels of interactivity between the music and art the user can adjust
+* The ability for the user to pick a song from some streaming service
 * Multiple streaming services
 * User can link their personal account with the streaming service (ie. Youtube, Spotify...)
 * User can create an account for the page that saves their linked accounts, play history
