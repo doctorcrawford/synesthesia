@@ -16,6 +16,14 @@ A music visualizer with 3D artwork that is interactive with the music being play
 * React
 * Typescript
 
+
+## How to Run Project
+
+1. Clone this repo
+2. In your terminal, navigate to the project directory and run ```npm run dev``` 
+* In your broswer, open http://localhost:5173
+* Use the GUI to navigate the page
+
 ### Research & Planning Log
 #### Tuesday, 7/4
 * 9:40: set up base react project
