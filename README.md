@@ -8,7 +8,7 @@
 
 ## Description
 
-A music visualizer that has digital artwork that is interactive with the music you play.
+A music visualizer with 3D artwork that is interactive with the music being played.
 
 ## Technologies Used
 
