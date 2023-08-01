@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max } from './Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere } from './Modulate';
 
 const noise = new SimplexNoise();
 
@@ -30,17 +30,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   const controls = setControls(camera, node);
 
-  // Resize
-  window.addEventListener('resize', () => {
-    //Update Sizes
-    sizes.width = window.innerWidth;
-    sizes.height = window.innerHeight;
-
-    // Update Camera
-    camera.aspect = sizes.width / sizes.height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(sizes.width, sizes.height);
-  })
+  resizeCameraForWindow(sizes, camera, renderer);
 
   const [audioContext, audioElement, dataArray, gainNode, panner, analyser] = setAudio(camera);
 
@@ -63,12 +53,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
 
   //The Shapes
-  const sphereGeometry = new THREE.SphereGeometry(10, 256, 128);
-  const sphereMaterial = new THREE.MeshPhongMaterial({
-    color: "#e6ffa8",
-    wireframe: true,
-  });
-  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  const [sphere, sphereGeometry] = setSphere();
   group.add(sphere);
 
   const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
@@ -311,4 +296,21 @@ function setControls(camera: THREE.PerspectiveCamera, node: HTMLDivElement): Orb
   controls.autoRotateSpeed = 1;
 
   return controls;
+}
+
+function resizeCameraForWindow(sizes: {
+  width: number;
+  height: number;
+}, camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
+  // Resize
+  window.addEventListener('resize', () => {
+    //Update Sizes
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    // Update Camera
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+  })
 }

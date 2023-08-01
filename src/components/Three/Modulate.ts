@@ -1,4 +1,5 @@
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise.js";
+import * as THREE from 'three'
 
 type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 
@@ -75,4 +76,15 @@ export function avg(arr: Uint8Array): number {
 
 export function max(arr: Uint8Array): number {
   return arr.reduce(function (a, b) { return Math.max(a, b); })
+}
+
+export function setSphere(): [THREE.Mesh<THREE.SphereGeometry, THREE.MeshPhongMaterial>, THREE.SphereGeometry] {
+  const sphereGeometry = new THREE.SphereGeometry(10, 256, 128);
+  const sphereMaterial = new THREE.MeshPhongMaterial({
+    color: "#e6ffa8",
+    wireframe: true,
+  });
+  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+  return [sphere, sphereGeometry];
 }
