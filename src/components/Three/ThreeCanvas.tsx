@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlane, setSpotlight } from './Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlane, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from './Modulate';
 
 const noise = new SimplexNoise();
 
@@ -28,7 +27,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   camera.position.set(0, 0, 100);
 
-  const controls = setControls(camera, node);
+  const controls = setOrbitControls(camera, node);
 
   resizeCameraForWindow(sizes, camera, renderer);
 
@@ -242,65 +241,3 @@ function setAudio(camera: THREE.PerspectiveCamera): [AudioContext, HTMLMediaElem
   return [audioContext, audioElement, dataArray, gainNode, panner, analyser];
 }
 
-function setPlayButton(audioContext: AudioContext, audioElement: HTMLMediaElement) {
-  const playButton = document.getElementById('play-button');
-  if (playButton) {
-    playButton?.addEventListener(
-      "click",
-      () => {
-        // Check if context is in suspended state (autoplay policy)
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-
-        // Play or pause track depending on state
-        if (playButton.dataset.playing === "false") {
-          audioElement.play();
-          playButton.dataset.playing = "true";
-        } else if (playButton.dataset.playing === "true") {
-          audioElement.pause();
-          playButton.dataset.playing = "false";
-        }
-      },
-      false,
-    );
-
-    audioElement.addEventListener(
-      'ended',
-      () => {
-        playButton.dataset.playing = 'false';
-      },
-      false,
-    );
-  } else {
-    throw new Error('no audio element');
-  }
-}
-
-function setControls(camera: THREE.PerspectiveCamera, node: HTMLDivElement): OrbitControls {
-  const controls = new OrbitControls(camera, node);
-  controls.enableDamping = true;
-  controls.enablePan = false;
-  controls.enableZoom = false;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 1;
-
-  return controls;
-}
-
-function resizeCameraForWindow(sizes: {
-  width: number;
-  height: number;
-}, camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
-  // Resize
-  window.addEventListener('resize', () => {
-    //Update Sizes
-    sizes.width = window.innerWidth;
-    sizes.height = window.innerHeight;
-
-    // Update Camera
-    camera.aspect = sizes.width / sizes.height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(sizes.width, sizes.height);
-  })
-}
