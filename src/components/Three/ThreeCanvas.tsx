@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere } from './Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlane, setSpotlight } from './Modulate';
 
 const noise = new SimplexNoise();
 
@@ -56,35 +56,25 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   const [sphere, sphereGeometry] = setSphere();
   group.add(sphere);
 
-  const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
-  const planeMaterial = new THREE.MeshPhongMaterial({
-    color: "#00ff83",
-    // side: THREE.DoubleSide,
-    wireframe: true
-  });
-
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  const [plane, planeGeometry] = setPlane();
   plane.rotation.x = 0.5 * Math.PI;
   plane.position.set(0, 30, 0);
   group.add(plane);
 
-  const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
+  const [plane2] = setPlane();
   plane2.rotation.x = 0.5 * Math.PI;
   plane2.position.set(0, -30, 0);
   group.add(plane2);
 
   //Light
-  const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
-  spotlight.intensity = 5.9;
-  spotlight.position.set(-30, 40, 20);
+  const spotlight = setSpotlight();
   spotlight.lookAt(sphere.position);
-  spotlight.castShadow = true;
   scene.add(spotlight);
 
   const ambientLight = new THREE.AmbientLight(0xaaaaaa);
   scene.add(ambientLight);
 
-
+  // Audio control
   const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
   if (volumeControl) {
     volumeControl.addEventListener(

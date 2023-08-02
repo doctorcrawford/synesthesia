@@ -88,3 +88,25 @@ export function setSphere(): [THREE.Mesh<THREE.SphereGeometry, THREE.MeshPhongMa
 
   return [sphere, sphereGeometry];
 }
+
+export function setPlane(): [THREE.Mesh<THREE.PlaneGeometry, THREE.MeshPhongMaterial>, THREE.PlaneGeometry] {
+  const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
+  const planeMaterial = new THREE.MeshPhongMaterial({
+    color: "#00ff83",
+    // side: THREE.DoubleSide,
+    wireframe: true
+  });
+
+  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+  return [plane, planeGeometry];
+}
+
+export function setSpotlight(): THREE.SpotLight {
+  const spotlight = new THREE.SpotLight(0xffffff, 1, 100);
+  spotlight.intensity = 5.9;
+  spotlight.position.set(-30, 40, 20);
+  spotlight.castShadow = true;
+
+  return spotlight;
+}
