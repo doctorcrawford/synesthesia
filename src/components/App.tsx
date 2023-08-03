@@ -12,7 +12,7 @@ function App() {
         <Header />
         <Audio />
         <Routes>
-          <Route path='/' element={<ThreeCanvas />} />
+          <Route path='/synesthesia' element={<ThreeCanvas />} />
         </Routes>
       </Router>
     </>
