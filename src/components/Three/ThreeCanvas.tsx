@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from './Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from '../../helper/Modulate';
 
 const noise = new SimplexNoise();
 

@@ -1,8 +1,8 @@
-import { ThreeCanvas } from './Three/ThreeCanvas'
+import { ThreeCanvas } from './three/ThreeCanvas'
 import Header from './Header';
 import Navbar from './Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Audio from './Audio/Audio';
+import AudioPlayer from './audio/AudioPlayer';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Navbar />
         <Header />
-        <Audio />
+        <AudioPlayer />
         <Routes>
           <Route path='/synesthesia' element={<ThreeCanvas />} />
         </Routes>
