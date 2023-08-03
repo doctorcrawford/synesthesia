@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from '../../helper/Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setOrbitControls, resizeCameraForWindow } from '../../helper/Modulate';
 
 const noise = new SimplexNoise();
 
@@ -48,7 +48,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     },
   };
 
-  setPlayButton(audioContext, audioElement);
+  // setPlayButton(audioContext, audioElement);
 
 
   //The Shapes
@@ -72,33 +72,33 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   const ambientLight = new THREE.AmbientLight(0xaaaaaa);
   scene.add(ambientLight);
 
-  // Audio control
-  const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
-  if (volumeControl) {
-    volumeControl.addEventListener(
-      'input',
-      () => {
-        gainNode.gain.value = parseFloat(volumeControl.value);
-      },
-      false,
-    );
-  } else {
-    throw new Error('no volume control');
-  }
+  // // Audio control
+  // const volumeControl: HTMLInputElement | null = document.querySelector('#volume');
+  // if (volumeControl) {
+  //   volumeControl.addEventListener(
+  //     'input',
+  //     () => {
+  //       gainNode.gain.value = parseFloat(volumeControl.value);
+  //     },
+  //     false,
+  //   );
+  // } else {
+  //   throw new Error('no volume control');
+  // }
 
-  const pannerControl: HTMLInputElement | null = document.querySelector('#panner');
+  // const pannerControl: HTMLInputElement | null = document.querySelector('#panner');
 
-  if (pannerControl) {
-    pannerControl.addEventListener(
-      'input',
-      () => {
-        panner.pan.value = parseFloat(pannerControl.value);
-      },
-      false,
-    );
-  } else {
-    throw new Error('no panner control');
-  }
+  // if (pannerControl) {
+  //   pannerControl.addEventListener(
+  //     'input',
+  //     () => {
+  //       panner.pan.value = parseFloat(pannerControl.value);
+  //     },
+  //     false,
+  //   );
+  // } else {
+  //   throw new Error('no panner control');
+  // }
 
   //Timeline
   const tl = gsap.timeline({ defaults: { duration: 1 } })

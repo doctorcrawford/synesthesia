@@ -23,7 +23,7 @@ export default function Audio() {
         <ProgressBar />
 
       </div>
-      <audio src={Track}></audio>
+      {/* <audio src={Track}></audio>
       <label>Volume</label>
       <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
       <label>Panner</label>
@@ -31,7 +31,7 @@ export default function Audio() {
       <br />
       <button id='play-button' data-playing='false' role='switch' aria-checked='false'>
         Play/Pause
-      </button>
+      </button> */}
     </div>
   )
 }
