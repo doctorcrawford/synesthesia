@@ -154,7 +154,7 @@ export function setSphere(): [THREE.Mesh<THREE.SphereGeometry, THREE.MeshPhongMa
   return [sphere, sphereGeometry];
 }
 
-export function setPlanes(): [THREE.Mesh<THREE.PlaneGeometry, THREE.MeshPhongMaterial>, THREE.Mesh<THREE.PlaneGeometry, THREE.MeshPhongMaterial>, THREE.PlaneGeometry] {
+export function setPlane(): [THREE.Mesh<THREE.PlaneGeometry, THREE.MeshPhongMaterial>, THREE.PlaneGeometry] {
   const planeGeometry = new THREE.PlaneGeometry(800, 800, 60, 60);
   const planeMaterial = new THREE.MeshPhongMaterial({
     color: "#00ff83",
@@ -163,9 +163,8 @@ export function setPlanes(): [THREE.Mesh<THREE.PlaneGeometry, THREE.MeshPhongMat
   });
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
 
-  return [plane, plane2, planeGeometry];
+  return [plane, planeGeometry];
 }
 
 export function setSpotlight(): THREE.SpotLight {

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from './Modulate';
+import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlane, setSpotlight, setPlayButton, setOrbitControls, resizeCameraForWindow } from './Modulate';
 
 const noise = new SimplexNoise();
 
@@ -55,11 +55,12 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   const [sphere, sphereGeometry] = setSphere();
   group.add(sphere);
 
-  const [plane, plane2, planeGeometry] = setPlanes();
+  const [plane, planeGeometry] = setPlane();
   plane.rotation.x = 0.5 * Math.PI;
   plane.position.set(0, 30, 0);
   group.add(plane);
 
+  const [plane2] = setPlane();
   plane2.rotation.x = 0.5 * Math.PI;
   plane2.position.set(0, -30, 0);
   group.add(plane2);
