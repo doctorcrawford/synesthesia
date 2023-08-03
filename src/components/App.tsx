@@ -1,8 +1,8 @@
-import { ThreeCanvas } from './three/ThreeCanvas'
+import { ThreeCanvas } from './Three/ThreeCanvas'
 import Header from './Header';
 import Navbar from './Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AudioPlayer from './audio/AudioPlayer';
+import AudioPlayer from './Audio/AudioPlayer';
 
 function App() {
   return (

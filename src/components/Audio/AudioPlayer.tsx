@@ -1,20 +1,20 @@
-import { useState, useRef } from 'react';
-import { tracks } from '../../data/tracks';
+// import { useState, useRef } from 'react';
+// import { tracks } from '../../data/tracks';
 
 import Track from './../../resources/radio-man.mp3';
-import DisplayTrack from './DisplayTrack';
-import Controls from './Controls';
-import ProgressBar from './ProgressBar';
+// import DisplayTrack from './DisplayTrack';
+// import Controls from './Controls';
+// import ProgressBar from './ProgressBar';
 
 export default function Audio() {
-  const [currentTrack, setCurrentTrack] = useState(tracks[0]);
+  // const [currentTrack, setCurrentTrack] = useState(tracks[0]);
 
-  const audioRef = useRef(null);
-  console.log(audioRef);
+  // const audioRef = useRef(null);
+  // console.log(audioRef);
 
   return (
     <div className='audio-player'>
-      <div className='inner'>
+      {/* <div className='inner'>
         <DisplayTrack
           currentTrack={currentTrack}
           audioRef={audioRef}
@@ -22,8 +22,8 @@ export default function Audio() {
         <Controls audioRef={audioRef} />
         <ProgressBar />
 
-      </div>
-      {/* <audio src={Track}></audio>
+      </div> */}
+      <audio src={Track}></audio>
       <label>Volume</label>
       <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
       <label>Panner</label>
@@ -31,7 +31,7 @@ export default function Audio() {
       <br />
       <button id='play-button' data-playing='false' role='switch' aria-checked='false'>
         Play/Pause
-      </button> */}
+      </button>
     </div>
   )
 }

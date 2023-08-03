@@ -80,40 +80,40 @@ export function max(arr: Uint8Array): number {
   return arr.reduce(function (a, b) { return Math.max(a, b); })
 }
 
-// export function setPlayButton(audioContext: AudioContext, audioElement: HTMLMediaElement) {
-//   const playButton = document.getElementById('play-button');
-//   if (playButton) {
-//     playButton?.addEventListener(
-//       "click",
-//       () => {
-//         // Check if context is in suspended state (autoplay policy)
-//         if (audioContext.state === "suspended") {
-//           audioContext.resume();
-//         }
+export function setPlayButton(audioContext: AudioContext, audioElement: HTMLMediaElement) {
+  const playButton = document.getElementById('play-button');
+  if (playButton) {
+    playButton?.addEventListener(
+      "click",
+      () => {
+        // Check if context is in suspended state (autoplay policy)
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
 
-//         // Play or pause track depending on state
-//         if (playButton.dataset.playing === "false") {
-//           audioElement.play();
-//           playButton.dataset.playing = "true";
-//         } else if (playButton.dataset.playing === "true") {
-//           audioElement.pause();
-//           playButton.dataset.playing = "false";
-//         }
-//       },
-//       false,
-//     );
+        // Play or pause track depending on state
+        if (playButton.dataset.playing === "false") {
+          audioElement.play();
+          playButton.dataset.playing = "true";
+        } else if (playButton.dataset.playing === "true") {
+          audioElement.pause();
+          playButton.dataset.playing = "false";
+        }
+      },
+      false,
+    );
 
-//     audioElement.addEventListener(
-//       'ended',
-//       () => {
-//         playButton.dataset.playing = 'false';
-//       },
-//       false,
-//     );
-//   } else {
-//     throw new Error('no audio element');
-//   }
-// }
+    audioElement.addEventListener(
+      'ended',
+      () => {
+        playButton.dataset.playing = 'false';
+      },
+      false,
+    );
+  } else {
+    throw new Error('no audio element');
+  }
+}
 
 export function setOrbitControls(camera: THREE.PerspectiveCamera, node: HTMLDivElement): OrbitControls {
   const controls = new OrbitControls(camera, node);
