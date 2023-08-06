@@ -52,7 +52,7 @@ button {
 }
 
 button:hover {
-  box-shadow: 4px 4px 4px .5px rgba(234, 224, 81, 0.744);
+  box-shadow: 0px 0px 4px 3px rgba(234, 224, 81, 0.744);
 }
 
 .audio-player {
