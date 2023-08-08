@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setOrbitControls, setPlayButton, resizeCameraForWindow } from '../../helper/Modulate';
+import { setAudio, makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setOrbitControls, setPlayButton, resizeCameraForWindow } from '../../helper/Modulate';
 
 const noise = new SimplexNoise();
 
@@ -213,30 +213,5 @@ export const ThreeCanvas = () => {
       ref={threeDivRef}
     ></div>
   );
-}
-
-function setAudio(camera: THREE.PerspectiveCamera): [AudioContext, HTMLMediaElement, Uint8Array, GainNode, StereoPannerNode, AnalyserNode] {
-  const listener = new THREE.AudioListener();
-  camera.add(listener);
-  const sound = new THREE.Audio(listener);
-  sound.autoplay = true;
-  sound.setLoop(true);
-  const audioContext = new window.AudioContext();
-  const audioElement = document.querySelector('audio') as HTMLMediaElement;
-  const source = audioContext.createMediaElementSource(audioElement);
-  const analyser = audioContext.createAnalyser();
-  const gainNode = audioContext.createGain();
-  const pannerOptions = { pan: 0 };
-  const panner = new StereoPannerNode(audioContext, pannerOptions);
-  source
-    .connect(gainNode)
-    .connect(panner)
-    .connect(analyser)
-    .connect(audioContext.destination);
-  analyser.fftSize = 1024;
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-
-  return [audioContext, audioElement, dataArray, gainNode, panner, analyser];
 }
 

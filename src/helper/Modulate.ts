@@ -5,6 +5,31 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 type Mesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>
 
+export function setAudio(camera: THREE.PerspectiveCamera): [AudioContext, HTMLMediaElement, Uint8Array, GainNode, StereoPannerNode, AnalyserNode] {
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+  const sound = new THREE.Audio(listener);
+  sound.autoplay = true;
+  sound.setLoop(true);
+  const audioContext = new window.AudioContext();
+  const audioElement = document.querySelector('audio') as HTMLMediaElement;
+  const source = audioContext.createMediaElementSource(audioElement);
+  const analyser = audioContext.createAnalyser();
+  const gainNode = audioContext.createGain();
+  const pannerOptions = { pan: 0 };
+  const panner = new StereoPannerNode(audioContext, pannerOptions);
+  source
+    .connect(gainNode)
+    .connect(panner)
+    .connect(analyser)
+    .connect(audioContext.destination);
+  analyser.fftSize = 1024;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  return [audioContext, audioElement, dataArray, gainNode, panner, analyser];
+}
+
 export function makeRoughSphere(noise: SimplexNoise, mesh: Mesh, spherePosition_clone: Float32Array, sphereNormals_clone: Float32Array, bassFr: number, treFr: number, damping: number) {
   const sphereCount = mesh.geometry.attributes.position.count;
 
