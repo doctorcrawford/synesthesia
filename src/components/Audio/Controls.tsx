@@ -21,8 +21,6 @@ const Controls = ({ audioRef }: { audioRef: React.MutableRefObject<HTMLAudioElem
     setIsPlaying((prev) => !prev);
   };
 
-  console.log(window.AudioContext);
-
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
