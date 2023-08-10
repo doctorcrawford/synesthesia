@@ -15,7 +15,6 @@ export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
   // setCurrentTrack(tracks[0]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  console.log(audioRef);
 
   return (
     <div className='audio-player'>

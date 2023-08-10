@@ -25,10 +25,8 @@ const Controls = ({ audioRef, audioContext }: ControlsProps) => {
     // Check if context is in suspended state (autoplay policy)
     if (audioContext.state === "suspended") {
       audioContext.resume();
-      console.log(audioContext);
     }
     setIsPlaying((prev) => !prev);
-
   };
 
   useEffect(() => {
