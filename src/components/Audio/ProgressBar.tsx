@@ -1,7 +1,9 @@
 const ProgressBar = () => {
   return (
-    <div>
-      Progress Bar
+    <div className="progress">
+      <span className="time current">00:00</span>
+      <input type="range" />
+      <span className="time">4:14</span>
     </div>
   );
 }
