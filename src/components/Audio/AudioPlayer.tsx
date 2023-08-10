@@ -12,19 +12,16 @@ interface AudioPlayerProps {
 
 export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
   const [currentTrack, setCurrentTrack] = useState(tracks[0]);
-  // setCurrentTrack(tracks[0]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressBarRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className='audio-player'>
       <div className='inner'>
-        <DisplayTrack
-          currentTrack={currentTrack}
-          audioRef={audioRef}
-        />
-        <Controls audioRef={audioRef} audioContext={audioContext} />
-        <ProgressBar />
+        <DisplayTrack {...{ currentTrack, audioRef }} />
+        <Controls {...{ audioRef, audioContext }} />
+        <ProgressBar {...{ progressBarRef, audioRef }} />
 
       </div>
       <audio src={Track}></audio>

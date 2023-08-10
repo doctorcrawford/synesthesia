@@ -5,7 +5,7 @@ import {
   IoPlayBackSharp,
   IoPlayForwardSharp,
   IoPlaySkipBackSharp,
-  IoPlaySkipForwardSharp,
+IoPlaySkipForwardSharp,
   IoPlaySharp,
   IoPauseSharp,
 } from 'react-icons/io5';
