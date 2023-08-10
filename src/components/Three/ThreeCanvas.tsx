@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react'
 import * as THREE from 'three'
 import gsap from 'gsap';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
-import { setAudio, makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setOrbitControls, setPlayButton, resizeCameraForWindow } from '../../helper/Modulate';
+import { setAudio, makeRoughGround, makeRoughSphere, modulate, avg, max, setSphere, setPlanes, setSpotlight, setOrbitControls, resizeCameraForWindow } from '../../helper/Modulate';
 
 const noise = new SimplexNoise();
 
-const initThreeJsScene = (node: HTMLDivElement): void => {
+const initThreeJsScene = (node: HTMLDivElement, audioContext: AudioContext): void => {
 
   const scene = new THREE.Scene();
   const group = new THREE.Group();
@@ -31,7 +31,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
 
   resizeCameraForWindow(sizes, camera, renderer);
 
-  const [audioContext, audioElement, dataArray, gainNode, panner, analyser] = setAudio(camera);
+  const [dataArray, gainNode, panner, analyser] = setAudio(camera, audioContext);
 
   const uniforms = {
     u_time: {
@@ -48,7 +48,7 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
     },
   };
 
-  setPlayButton(audioContext, audioElement);
+  // setPlayButton(audioContext, audioElement);
 
 
   //The Shapes
@@ -189,12 +189,12 @@ const initThreeJsScene = (node: HTMLDivElement): void => {
   animate();
 }
 
-export const ThreeCanvas = () => {
+export const ThreeCanvas = ({ audioContext }: { audioContext: AudioContext}) => {
   const [initialized, setInitialized] = useState(false);
   const threeDivRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (node !== null && !initialized) {
-        initThreeJsScene(node);
+        initThreeJsScene(node, audioContext);
         setInitialized(true);
       }
     },

@@ -2,13 +2,12 @@ import { ThreeCanvas } from "./Three/ThreeCanvas";
 import AudioPlayer from "./Audio/AudioPlayer";
 
 function Main() {
-  // const audioContext = new window.AudioContext();
-
-
+  const audioContext = new window.AudioContext();
+  
   return (
     <>
-      <AudioPlayer />
-      <ThreeCanvas />
+      <AudioPlayer audioContext={audioContext} />
+      <ThreeCanvas audioContext={audioContext} />
     </>
   )
 }
