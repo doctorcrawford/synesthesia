@@ -6,10 +6,15 @@ import DisplayTrack from './DisplayTrack';
 import Controls from './Controls';
 import ProgressBar from './ProgressBar';
 
-export default function AudioPlayer() {
-  const [currentTrack, setCurrentTrack] = useState(tracks[0]);
+interface AudioPlayerProps {
+  audioContext: AudioContext;
+}
 
-  const audioRef = useRef(null);
+export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
+  const [currentTrack, setCurrentTrack] = useState(tracks[0]);
+  // setCurrentTrack(tracks[0]);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   console.log(audioRef);
 
   return (
@@ -19,7 +24,7 @@ export default function AudioPlayer() {
           currentTrack={currentTrack}
           audioRef={audioRef}
         />
-        <Controls audioRef={audioRef} />
+        <Controls audioRef={audioRef} audioContext={audioContext} />
         <ProgressBar />
 
       </div>
@@ -29,9 +34,9 @@ export default function AudioPlayer() {
       <label>Panner</label>
       <input type='range' id='panner' min='-1' max='1' defaultValue='0' step='0.01' />
       <br />
-      <button id='play-button' data-playing='false' role='switch' aria-checked='false'>
-        Play/Pause
-      </button>
+      {/* <button id='play-button' data-playing='false' role='switch' aria-checked='false'> */}
+      {/* Play/Pause
+      </button> */}
     </div>
   )
 }

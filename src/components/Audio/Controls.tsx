@@ -10,22 +10,28 @@ import {
   IoPauseSharp,
 } from 'react-icons/io5';
 
-const Controls = ({ audioRef }: { audioRef: React.MutableRefObject<HTMLAudioElement | null> }) => {
+interface ControlsProps {
+  audioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  audioContext: AudioContext;
+}
+
+const Controls = ({ audioRef, audioContext }: ControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const audioContext = new window.AudioContext();
+  // const audioContext = new window.AudioContext();
+  audioContext.resume();
 
   const togglePlayPause = () => {
     // Check if context is in suspended state (autoplay policy)
     if (audioContext.state === "suspended") {
       audioContext.resume();
+      console.log(audioContext);
     }
     setIsPlaying((prev) => !prev);
-    console.log
+
   };
 
   useEffect(() => {
-
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.play();
