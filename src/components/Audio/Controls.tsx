@@ -13,15 +13,19 @@ import {
 const Controls = ({ audioRef }: { audioRef: React.MutableRefObject<HTMLAudioElement | null> }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const audioContext = new window.AudioContext();
+
   const togglePlayPause = () => {
     // Check if context is in suspended state (autoplay policy)
-    // if (audioContext.state === "suspended") {
-    //   audioContext.resume();
-    // }
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
     setIsPlaying((prev) => !prev);
+    console.log
   };
 
   useEffect(() => {
+
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.play();
