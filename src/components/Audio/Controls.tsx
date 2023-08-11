@@ -18,16 +18,6 @@ interface ControlsProps {
   setTimeProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const hummus = {
-  "background-color": "red",
-
-
-
-  right: 0,
-  left: 0,
-  // backgroundColor: "red"
-}
-
 const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress }: ControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playAnimationRef = useRef<number>(0);
