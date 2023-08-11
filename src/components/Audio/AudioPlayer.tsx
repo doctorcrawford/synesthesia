@@ -22,7 +22,7 @@ export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
     <div className='audio-player'>
       <div className='inner'>
         <DisplayTrack {...{ currentTrack, audioRef, setDuration, progressBarRef }} />
-        <Controls {...{ audioRef, audioContext }} />
+        <Controls {...{ audioRef, audioContext, progressBarRef, duration, setTimeProgress }} />
         <ProgressBar {...{ progressBarRef, audioRef, timeProgress, duration }} />
 
       </div>

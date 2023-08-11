@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
 
 // icons
 import {
   IoPlayBackSharp,
   IoPlayForwardSharp,
   IoPlaySkipBackSharp,
-IoPlaySkipForwardSharp,
+  IoPlaySkipForwardSharp,
   IoPlaySharp,
   IoPauseSharp,
 } from 'react-icons/io5';
@@ -13,12 +13,25 @@ IoPlaySkipForwardSharp,
 interface ControlsProps {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
   audioContext: AudioContext;
+  progressBarRef: React.MutableRefObject<HTMLInputElement | null>;
+  duration: number;
+  setTimeProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Controls = ({ audioRef, audioContext }: ControlsProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const hummus = {
+  "background-color": "red",
 
-  // const audioContext = new window.AudioContext();
+
+
+  right: 0,
+  left: 0,
+  // backgroundColor: "red"
+}
+
+const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress }: ControlsProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playAnimationRef = useRef<number>(0);
+
   audioContext.resume();
 
   const togglePlayPause = () => {
@@ -29,6 +42,24 @@ const Controls = ({ audioRef, audioContext }: ControlsProps) => {
     setIsPlaying((prev) => !prev);
   };
 
+  const repeat = useCallback(() => {
+    const currentTime = audioRef.current?.currentTime;
+    if (currentTime && progressBarRef.current !== null) {
+      setTimeProgress(currentTime);
+
+      // progressBarRef.current.value = currentTime.toString();
+
+      progressBarRef.current.style.setProperty(
+        '--range-progress',
+        `${(currentTime / duration) * 100}%`
+      );
+    }
+
+    if (playAnimationRef.current) {
+      playAnimationRef.current = requestAnimationFrame(repeat);
+    }
+  }, [audioRef, duration, progressBarRef, setTimeProgress]);
+
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -37,7 +68,9 @@ const Controls = ({ audioRef, audioContext }: ControlsProps) => {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying, audioRef]);
+    playAnimationRef.current = requestAnimationFrame(repeat);
+  }, [isPlaying, audioRef, repeat]);
+
 
   return (
     <div className="controls-wrapper">
