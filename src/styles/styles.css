@@ -221,3 +221,7 @@ button svg {
 .top__bar p {
   margin: 0;
 }
+
+#volume-panner {
+  display: none;
+}

@@ -27,14 +27,13 @@ export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
 
       </div>
       <audio src={Track}></audio>
-      <label>Volume</label>
-      <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
-      <label>Panner</label>
-      <input type='range' id='panner' min='-1' max='1' defaultValue='0' step='0.01' />
-      <br />
-      {/* <button id='play-button' data-playing='false' role='switch' aria-checked='false'> */}
-      {/* Play/Pause
-      </button> */}
+      <div id='volume-panner'>
+        <label>Volume</label>
+        <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
+        <label>Panner</label>
+        <input type='range' id='panner' min='-1' max='1' defaultValue='0' step='0.01' />
+        <br />
+      </div>
     </div>
   )
 }
