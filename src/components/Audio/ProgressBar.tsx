@@ -25,11 +25,12 @@ const ProgressBar = ({ progressBarRef, audioRef, timeProgress, duration }: Progr
 
   return (
     <div className="progress">
-      <span className="time current">{formatTime(timeProgress)}</span>
+      <span className="time current">{timeProgress ? formatTime(timeProgress) : `00:00`}</span>
       <input
         type="range"
         ref={progressBarRef}
         defaultValue="0"
+        value={timeProgress}
         onChange={handleProgressChange} />
       <span className="time">{formatTime(duration)}</span>
     </div>
