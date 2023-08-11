@@ -8,6 +8,7 @@ input[type="range"] {
   --range-progress: 0;
   
   -webkit-appearance: none;
+  appearance: none;
   position: relative;
   background:#ccc;
   width: 100%;
