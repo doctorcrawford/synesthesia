@@ -1,6 +1,7 @@
 import radioMan from './../resources/radio-man.mp3';
-import radioManPic from './../resources/radio-man-thumbnail.png';
+import radioManPic from './../resources/radio-man.png';
 import ronnieB from './../resources/ronnie-b.mp3';
+import ronnieBPic from './../resources/ronnie-b.jpg';
 
 export const tracks = [
   {
@@ -13,6 +14,6 @@ export const tracks = [
     title: 'Ronnie B',
     src: ronnieB,
     author: 'KNXN',
-    // thumbnail: ,
+    thumbnail: ronnieBPic,
   },
 ]
