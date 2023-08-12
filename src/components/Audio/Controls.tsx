@@ -32,6 +32,7 @@ interface ControlsProps {
 const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress, tracks, trackIndex, setTrackIndex, setCurrentTrack }: ControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playAnimationRef = useRef<number>(0);
+  const [volume, setVolume] = useState(60);
 
   audioContext.resume();
 
@@ -48,11 +49,13 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
       audioRef.current.currentTime += 15;
     }
   };
+
   const skipBackward = () => {
     if (audioRef.current) {
       audioRef.current.currentTime -= 15;
     }
   };
+
   const handlePrevious = () => {
     if (trackIndex === 0) {
       const lastTrackIndex = tracks.length - 1;
@@ -63,6 +66,7 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
       setCurrentTrack(tracks[trackIndex - 1]);
     }
   };
+
   const handleNext = () => {
     if (trackIndex >= tracks.length - 1) {
       setTrackIndex(0);
@@ -102,6 +106,11 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
     playAnimationRef.current = requestAnimationFrame(repeat);
   }, [isPlaying, audioRef, repeat]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume, audioRef]);
 
   return (
     <div className="controls-wrapper">
@@ -122,6 +131,15 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
         <button onClick={handleNext}>
           <IoPlaySkipForwardSharp />
         </button>
+      </div>
+      <div className="volume">
+        <button>icons</button>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={volume}
+          onChange={(e) => setVolume(Number(e.target.value))} />
       </div>
     </div>
   );
