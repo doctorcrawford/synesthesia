@@ -33,9 +33,10 @@ interface ControlsProps {
   trackIndex: number;
   setTrackIndex: React.Dispatch<React.SetStateAction<number>>;
   setCurrentTrack: React.Dispatch<React.SetStateAction<Track>>;
+  handleNext: () => void;
 }
 
-const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress, tracks, trackIndex, setTrackIndex, setCurrentTrack }: ControlsProps) => {
+const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress, tracks, trackIndex, setTrackIndex, setCurrentTrack, handleNext }: ControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playAnimationRef = useRef<number>(0);
   const [volume, setVolume] = useState(60);
@@ -71,16 +72,6 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
     } else {
       setTrackIndex(trackIndex - 1);
       setCurrentTrack(tracks[trackIndex - 1]);
-    }
-  };
-
-  const handleNext = () => {
-    if (trackIndex >= tracks.length - 1) {
-      setTrackIndex(0);
-      setCurrentTrack(tracks[0]);
-    } else {
-      setTrackIndex(trackIndex + 1);
-      setCurrentTrack(tracks[trackIndex + 1]);
     }
   };
 

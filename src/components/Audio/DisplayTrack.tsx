@@ -12,9 +12,10 @@ interface DisplayTrackProps {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
   setDuration: React.Dispatch<React.SetStateAction<number>>;
   progressBarRef: React.MutableRefObject<HTMLInputElement | null>;
+  handleNext: () => void;
 }
 
-const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef }: DisplayTrackProps) => {
+const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef, handleNext }: DisplayTrackProps) => {
 
   const onLoadedMetadata = () => {
     if (audioRef.current && progressBarRef.current) {
@@ -29,7 +30,8 @@ const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef }: D
       <audio
         src={currentTrack.src}
         ref={audioRef}
-        onLoadedMetadata={onLoadedMetadata} />
+        onLoadedMetadata={onLoadedMetadata}
+        onEnded={handleNext} />
       <div className='audio-info'>
         <div className='audio-image'>
           {currentTrack.thumbnail ? (
