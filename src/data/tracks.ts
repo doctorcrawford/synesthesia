@@ -3,7 +3,14 @@ import radioManPic from './../resources/radio-man.png';
 import ronnieB from './../resources/ronnie-b.mp3';
 import ronnieBPic from './../resources/ronnie-b.jpg';
 
-export const tracks = [
+type Track = {
+  title: string;
+  src: string;
+  author: string;
+  thumbnail?: string;
+};
+
+export const tracks: Track[] = [
   {
     title: 'Radio Man ft. An',
     src: radioMan,
