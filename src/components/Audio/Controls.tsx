@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 // icons
 import {
@@ -10,15 +10,26 @@ import {
   IoPauseSharp,
 } from 'react-icons/io5';
 
+type Track = {
+  title: string;
+  src: string;
+  author: string;
+  thumbnail?: string;
+};
+
 interface ControlsProps {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
   audioContext: AudioContext;
   progressBarRef: React.MutableRefObject<HTMLInputElement | null>;
   duration: number;
   setTimeProgress: React.Dispatch<React.SetStateAction<number>>;
+  tracks: Track[];
+  trackIndex: number;
+  setTrackIndex: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentTrack: React.Dispatch<React.SetStateAction<Track>>;
 }
 
-const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress }: ControlsProps) => {
+const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimeProgress, tracks, trackIndex, setTrackIndex, setCurrentTrack }: ControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playAnimationRef = useRef<number>(0);
 
@@ -30,6 +41,25 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
       audioContext.resume();
     }
     setIsPlaying((prev) => !prev);
+  };
+
+  const skipForward = () => {
+    console.log('hummus');
+  };
+  const skipBackward = () => {
+    console.log('hummus');
+  };
+  const handlePrevious = () => {
+    console.log('hummus');
+  };
+  const handleNext = () => {
+    if (trackIndex >= tracks.length - 1) {
+      setTrackIndex(0);
+      setCurrentTrack(tracks[0]);
+    } else {
+      setTrackIndex((prev) => prev + 1);
+      setCurrentTrack(tracks[trackIndex + 1]);
+    }
   };
 
   const repeat = useCallback(() => {
@@ -65,20 +95,20 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
   return (
     <div className="controls-wrapper">
       <div className="controls">
-        <button>
+        <button onClick={handlePrevious}>
           <IoPlaySkipBackSharp />
         </button>
-        <button>
+        <button onClick={skipBackward}>
           <IoPlayBackSharp />
         </button>
 
         <button onClick={togglePlayPause}>
           {isPlaying ? <IoPauseSharp /> : <IoPlaySharp />}
         </button>
-        <button>
+        <button onClick={skipForward}>
           <IoPlayForwardSharp />
         </button>
-        <button>
+        <button onClick={handleNext}>
           <IoPlaySkipForwardSharp />
         </button>
       </div>
