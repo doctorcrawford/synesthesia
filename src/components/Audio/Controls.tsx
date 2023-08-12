@@ -139,7 +139,10 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
           min={0}
           max={100}
           value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))} />
+          onChange={(e) => setVolume(Number(e.target.value))}
+          style={{
+            background: `linear-gradient(to right, #f50 ${volume}%, #ccc ${volume}%)`,
+          }} />
       </div>
     </div>
   );
