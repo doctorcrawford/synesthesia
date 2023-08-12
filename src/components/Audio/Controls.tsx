@@ -44,10 +44,14 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
   };
 
   const skipForward = () => {
-    console.log('hummus');
+    if (audioRef.current) {
+      audioRef.current.currentTime += 15;
+    }
   };
   const skipBackward = () => {
-    console.log('hummus');
+    if (audioRef.current) {
+      audioRef.current.currentTime -= 15;
+    }
   };
   const handlePrevious = () => {
     if (trackIndex === 0) {
