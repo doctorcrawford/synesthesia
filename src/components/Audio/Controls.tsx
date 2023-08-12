@@ -10,6 +10,12 @@ import {
   IoPauseSharp,
 } from 'react-icons/io5';
 
+import {
+  IoMdVolumeHigh,
+  IoMdVolumeOff,
+  IoMdVolumeLow,
+} from 'react-icons/io';
+
 type Track = {
   title: string;
   src: string;
@@ -33,6 +39,7 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
   const [isPlaying, setIsPlaying] = useState(false);
   const playAnimationRef = useRef<number>(0);
   const [volume, setVolume] = useState(60);
+  const [muteVolume, setMuteVolume] = useState(false);
 
   audioContext.resume();
 
@@ -109,8 +116,9 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
+      audioRef.current.muted = muteVolume;
     }
-  }, [volume, audioRef]);
+  }, [volume, audioRef, muteVolume]);
 
   return (
     <div className="controls-wrapper">
@@ -133,7 +141,15 @@ const Controls = ({ audioRef, audioContext, progressBarRef, duration, setTimePro
         </button>
       </div>
       <div className="volume">
-        <button>icons</button>
+        <button onClick={() => setMuteVolume((prev) => !prev)}>
+          {muteVolume || volume < 5 ? (
+            <IoMdVolumeOff />
+          ) : volume < 40 ? (
+            <IoMdVolumeLow />
+          ) : (
+            <IoMdVolumeHigh />
+          )}
+        </button>
         <input
           type="range"
           min={0}
