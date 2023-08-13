@@ -64,7 +64,9 @@ button:hover {
   z-index: 2;
   display: flex;
   flex-wrap: wrap;
-  background: #c1b6bc5a; 
+  margin: auto;
+  float: left;
+  background: #c1b6bc46; 
 }
 
 @media (max-width: 480px) {
