@@ -66,7 +66,7 @@ button:hover {
   flex-wrap: wrap;
   margin: auto;
   float: left;
-  background: #c1b6bc46; 
+  background: #c1b6bc4b; 
 }
 
 @media (max-width: 480px) {
