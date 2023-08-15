@@ -16,7 +16,7 @@ nav {
   color: white;
   z-index: 2;
   position: relative;
-  padding: 4rem 8rem;
+  padding: 2rem 4rem;
   display: flex;
   justify-content: space-between;
 }
