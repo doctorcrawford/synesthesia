@@ -58,7 +58,7 @@ button:hover {
 
 .audio-player {
   width: fit-content;
-  padding: 1em;
+  padding: 0.5em;
   border: 1px solid white;
   border-radius: 1em;
   z-index: 2;
