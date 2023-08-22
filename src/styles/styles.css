@@ -66,6 +66,7 @@ button:hover {
   flex-wrap: wrap;
   margin: auto;
   float: left;
+  margin-left: 10px;
   background: #c1b6bc4b; 
 }
 
