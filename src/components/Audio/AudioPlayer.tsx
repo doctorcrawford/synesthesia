@@ -41,7 +41,7 @@ export default function AudioPlayer({ audioContext }: AudioPlayerProps) {
       <div id='volume-panner'>
         <label>Volume</label>
         <input type='range' id='volume' min='0' max='2' defaultValue='1' step='0.01' />
-        <label>Panner</label>
+        <label>Panner(L - R)</label>
         <input type='range' id='panner' min='-1' max='1' defaultValue='0' step='0.01' />
         <br />
       </div>
